@@ -6,9 +6,7 @@ import javax.persistence.Id;
 @Entity (name="customers")
 public class Customer {
 	
-	private Customer() {
-		//private constructor so that the object cannot be instantiated
-	}
+	public Customer() {}
 
 	@Id
 	private int customerNumber;

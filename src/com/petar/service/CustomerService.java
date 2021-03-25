@@ -14,7 +14,7 @@ public interface CustomerService {
 	public boolean addCustomer(Customer customer);
 	
 	@WebMethod
-	public boolean deleteCustomer(Customer customer);
+	public boolean deleteCustomer(Integer id);
 	
 	@WebMethod
 	public Customer getCustomer(int id);

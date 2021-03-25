@@ -1,5 +1,7 @@
 package com.petar.service;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jws.WebService;
@@ -25,9 +27,20 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public boolean deleteCustomer(Customer customer) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteCustomer(Integer id) {
+		boolean result = false;
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		Serializable id2 = id;
+		Object persistentInstance = session.load(Customer.class, id2);
+		if (persistentInstance != null) {
+		    session.delete(persistentInstance);
+		    result = true;
+		}
+		session.getTransaction().commit();
+		session.close();
+		return result;
 	}
 
 	@Override
@@ -45,8 +58,14 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<Customer> getAllCustomers() {
-		// TODO Auto-generated method stub
-		return null;
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		@SuppressWarnings("unchecked")
+		List<Customer> customers = (List<Customer>) session.createNativeQuery("SELECT * FROM customers").addScalar("customerNumber").addScalar("customerName").list();
+		session.getTransaction().commit();
+		session.close();
+		return customers;
 	}
 
 }
