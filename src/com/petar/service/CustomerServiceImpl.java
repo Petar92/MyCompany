@@ -9,6 +9,7 @@ import javax.jws.WebService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import com.petar.model.Customer;
 
@@ -29,7 +30,13 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public boolean deleteCustomer(Integer id) {
 		boolean result = false;
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		SessionFactory sessionFactory = null;
+		try {
+			sessionFactory = new Configuration().configure().buildSessionFactory();
+		} catch (Throwable ex) {
+			System.err.println("Initial SessionFactory creation failed. " + ex);
+			ex.printStackTrace();
+		}
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Serializable id2 = id;
@@ -60,9 +67,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<Customer> getAllCustomers() {
 		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		@SuppressWarnings("unchecked")
-		List<Customer> customers = (List<Customer>) session.createNativeQuery("SELECT * FROM customers").addScalar("customerNumber").addScalar("customerName").list();
+		session.beginTransaction();		
+		Query<Customer> query = session.createQuery("from com.petar.model.Customer");
+		List<Customer> customers = query.list();
 		session.getTransaction().commit();
 		session.close();
 		return customers;

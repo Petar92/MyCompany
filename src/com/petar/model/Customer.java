@@ -1,15 +1,30 @@
 package com.petar.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Entity (name="customers")
 public class Customer {
 	
 	public Customer() {}
 
-	@Id
-	private int customerNumber;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer customerNumber;
 	private String customerName;
 	private String contactLastName;
 	private String contactFirstName;
@@ -20,14 +35,32 @@ public class Customer {
 	private String state;
 	private String postalCode;
 	private String country;
-	private int salesRepEmployeeNumber;
+	
+	
+	
+	@ManyToOne
+	@JoinColumn(name="employeeNumber")
+	private Employee employee;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumns({
+		@JoinColumn(), //name="customerNumber"),
+		@JoinColumn(name="checkNumber")
+	})
+	private Payment payment;
+	
+	@OneToMany(mappedBy="customer", cascade = CascadeType.ALL)
+	List<Order> orders = new ArrayList<Order>();
+	
+	private Integer salesRepEmployeeNumber;
+	
 	private double creditLimit;
 	
-	public int getCustomerNumber() {
+	public Integer getCustomerNumber() {
 		return customerNumber;
 	}
 
-	public void setCustomerNumber(int customerNumber) {
+	public void setCustomerNumber(Integer customerNumber) {
 		this.customerNumber = customerNumber;
 	}
 
@@ -111,11 +144,11 @@ public class Customer {
 		this.country = country;
 	}
 
-	public int getSalesRepEmployeeNumber() {
-		return salesRepEmployeeNumber;
+	public Integer getSalesRepEmployeeNumber() {
+		return employee.getEmployeeNumber();
 	}
 
-	public void setSalesRepEmployeeNumber(int salesRepEmployeeNumber) {
+	public void setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
 		this.salesRepEmployeeNumber = salesRepEmployeeNumber;
 	}
 
@@ -127,8 +160,32 @@ public class Customer {
 		this.creditLimit = creditLimit;
 	}
 	
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
 	public static class CustomerBuilder {
-		private int customerNumber;
+		private Integer customerNumber;
 		private String customerName;
 		private String contactLastName;
 		private String contactFirstName;
@@ -139,10 +196,10 @@ public class Customer {
 		private String state;
 		private String postalCode;
 		private String country;
-		private int salesRepEmployeeNumber;
+		private Integer salesRepEmployeeNumber;
 		private double creditLimit;
 		
-		public CustomerBuilder(int customerNumber) {
+		public CustomerBuilder(Integer customerNumber) {
 			this.customerNumber = customerNumber;
 		}
 		
@@ -196,7 +253,7 @@ public class Customer {
 			return this;
 		}
 		
-		public CustomerBuilder setSalesRepEmployeeNumber(int salesRepEmployeeNumber) {
+		public CustomerBuilder setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
 			this.salesRepEmployeeNumber = salesRepEmployeeNumber;
 			return this;
 		}

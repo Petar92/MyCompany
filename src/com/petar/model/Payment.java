@@ -1,22 +1,39 @@
 package com.petar.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Payment {
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+@Entity (name="payments")
+public class Payment implements Serializable{
 	
 	private Payment() {
 		//private constructor so that the object cannot be instantiated
 	}
 	
-	private int customerNumber;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer customerNumber;
+	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String checkNumber;
+	
 	private Date paymentDate;
 	private double amount;
 	
-	public int getCustomerNumber() {
+	public Integer getCustomerNumber() {
 		return customerNumber;
 	}
-	public void setCustomerNumber(int customerNumber) {
+	public void setCustomerNumber(Integer customerNumber) {
 		this.customerNumber = customerNumber;
 	}
 	public String getCheckNumber() {
@@ -40,16 +57,16 @@ public class Payment {
 	
 	public static class PaymentBuilder {
 		
-		private int customerNumber;
+		private Integer customerNumber;
 		private String checkNumber;
 		private Date paymentDate;
 		private double amount;
 		
-		public PaymentBuilder(int customerNumber) {
+		public PaymentBuilder(Integer customerNumber) {
 			this.customerNumber = customerNumber;
 		}
 
-		public PaymentBuilder setCustomerNumber(int customerNumber) {
+		public PaymentBuilder setCustomerNumber(Integer customerNumber) {
 			this.customerNumber = customerNumber;
 			return this;
 		}

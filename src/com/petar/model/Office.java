@@ -1,7 +1,19 @@
 package com.petar.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity (name="offices")
 public class Office {
 	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String officeCode;
 	private String city;
 	private String phone;
@@ -11,6 +23,9 @@ public class Office {
 	private String country;
 	private String postalCode;
 	private String territory;
+	
+	@OneToMany(mappedBy = "office", cascade = CascadeType.ALL)
+	private List<Employee> employees = new ArrayList<Employee>();
 	
 	private Office() {
 		//private constructor so that the object cannot be instantiated
@@ -71,6 +86,15 @@ public class Office {
 		this.territory = territory;
 	}
 	
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+
+
 	public static class OfficeBuilder {
 		
 		private String officeCode;

@@ -2,25 +2,48 @@ package com.petar.model;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+@Entity (name="orders")
 public class Order {
 	
-	private int orderNumber;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer orderNumber;
+	
 	private Date orderDate;
 	private Date requiredDate;
 	private Date shippedDate;
 	private String status;
 	private String comments;
-	private int customerNumber;
+	
+	@ManyToOne
+	@JoinColumn(name="customerNumber")
+	private Customer customer;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumns({
+		@JoinColumn(), //name="orderNumber"),
+		@JoinColumn(name="productCode")
+	})
+	private OrderDetails orderDetails;
 	
 	private Order() {
 		//private constructor so that the object cannot be instantiated
 	}
 
-	public int getOrderNumber() {
+	public Integer getOrderNumber() {
 		return orderNumber;
 	}
 
-	public void setOrderNumber(int orderNumber) {
+	public void setOrderNumber(Integer orderNumber) {
 		this.orderNumber = orderNumber;
 	}
 
@@ -63,30 +86,37 @@ public class Order {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-
-	public int getCustomerNumber() {
-		return customerNumber;
-	}
-
-	public void setCustomerNumber(int customerNumber) {
-		this.customerNumber = customerNumber;
-	}
 	
+	public OrderDetails getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(OrderDetails orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
 	public static class OrderBuilder {
 		
-		private int orderNumber;
+		private Integer orderNumber;
 		private Date orderDate;
 		private Date requiredDate;
 		private Date shippedDate;
 		private String status;
 		private String comments;
-		private int customerNumber;
 		
-		public OrderBuilder(int orderNumber) {
+		public OrderBuilder(Integer orderNumber) {
 			this.orderNumber = orderNumber;
 		}
 
-		public OrderBuilder setOrderNumber(int orderNumber) {
+		public OrderBuilder setOrderNumber(Integer orderNumber) {
 			this.orderNumber = orderNumber;
 			return this;
 		}
@@ -115,11 +145,6 @@ public class Order {
 			this.comments = comments;
 			return this;
 		}
-
-		public OrderBuilder setCustomerNumber(int customerNumber) {
-			this.customerNumber = customerNumber;
-			return this;
-		}
 		
 		public Order build() {
 			Order order = new Order();
@@ -129,7 +154,6 @@ public class Order {
 			order.shippedDate = this.shippedDate;
 			order.status = this.status;
 			order.comments = this.comments;
-			order.customerNumber = this.customerNumber;
 			
 			return order;
 		}

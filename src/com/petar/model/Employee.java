@@ -1,7 +1,17 @@
 package com.petar.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity(name="employees")
 public class Employee {
@@ -10,20 +20,34 @@ public class Employee {
 		//private constructor so that the object cannot be instantiated
 	}
 	
-	@Id
-	private int employeeNumber;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer employeeNumber;
 	private String lastName;
 	private String firstName;
 	private String extension;
 	private String email;
 	private String officeCode;
-	private int reportsTo;
+	private Integer reportsTo;
 	private String jobTitle;
 	
-	public int getEmployeeNumber() {
+	@OneToMany(mappedBy="employee", cascade = CascadeType.ALL)
+	List<Employee> employees = new ArrayList<Employee>();
+	
+	@ManyToOne
+	@JoinColumn(name="employeeNumber")
+	private Employee employee;
+	
+	@OneToMany(mappedBy="employee", cascade = CascadeType.ALL)
+	List<Customer> customers = new ArrayList<Customer>();
+	
+	@ManyToOne
+	@JoinColumn(name="officeCode")
+	private Office office;
+	
+	public Integer getEmployeeNumber() {
 		return employeeNumber;
 	}
-	public void setEmployeeNumber(int employeeNumber) {
+	public void setEmployeeNumber(Integer employeeNumber) {
 		this.employeeNumber = employeeNumber;
 	}
 	public String getLastName() {
@@ -56,10 +80,10 @@ public class Employee {
 	public void setOfficeCode(String officeCode) {
 		this.officeCode = officeCode;
 	}
-	public int getReportsTo() {
+	public Integer getReportsTo() {
 		return reportsTo;
 	}
-	public void setReportsTo(int reportsTo) {
+	public void setReportsTo(Integer reportsTo) {
 		this.reportsTo = reportsTo;
 	}
 	public String getJobTitle() {
@@ -69,22 +93,48 @@ public class Employee {
 		this.jobTitle = jobTitle;
 	}
 	
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+	public Employee getEmployee() {
+		return employee;
+	}
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
+	}
+	public Office getOffice() {
+		return office;
+	}
+	public void setOffice(Office office) {
+		this.office = office;
+	}
+
+
 	public static class EmployeeBuilder {
 		
-		private int employeeNumber;
+		private Integer employeeNumber;
 		private String lastName;
 		private String firstName;
 		private String extension;
 		private String email;
 		private String officeCode;
-		private int reportsTo;
+		private Integer reportsTo;
 		private String jobTitle;
 		
-		public EmployeeBuilder(int employeeNumber) {
+		public EmployeeBuilder(Integer employeeNumber) {
 			this.employeeNumber = employeeNumber;
 		}
 		
-		public EmployeeBuilder setEmployeeNumber(int employeeNumber) {
+		public EmployeeBuilder setEmployeeNumber(Integer employeeNumber) {
 			this.employeeNumber = employeeNumber;
 			return this;
 		}
@@ -108,7 +158,7 @@ public class Employee {
 			this.officeCode = officeCode;
 			return this;
 		}
-		public EmployeeBuilder setReportsTo(int reportsTo) {
+		public EmployeeBuilder setReportsTo(Integer reportsTo) {
 			this.reportsTo = reportsTo;
 			return this;
 		}

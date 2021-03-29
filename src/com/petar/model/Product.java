@@ -1,20 +1,43 @@
 package com.petar.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+@Entity (name="products")
 public class Product {
 	
 	private Product() {
 		//private constructor so that the object cannot be instantiated
 	}
 	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String productCode; 
+	
 	private String productName;
-	private String productLine;
 	private String productScale;
 	private String productVendor;
 	private String productDescription;
-	private int quantityInStock;
+	private Integer quantityInStock;
 	private double buyPrice;
 	private double msrp;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumns({
+		@JoinColumn(name="orderNumber"),
+		@JoinColumn(), //name="productCode")
+	})
+	private OrderDetails orderDetails;
+	
+	@ManyToOne
+	@JoinColumn(name="productLine")
+	private ProductLine productLine;
 	
 	public String getProductCode() {
 		return productCode;
@@ -27,12 +50,6 @@ public class Product {
 	}
 	public void setProductName(String productName) {
 		this.productName = productName;
-	}
-	public String getProductLine() {
-		return productLine;
-	}
-	public void setProductLine(String productLine) {
-		this.productLine = productLine;
 	}
 	public String getProductScale() {
 		return productScale;
@@ -52,10 +69,10 @@ public class Product {
 	public void setProductDescription(String productDescription) {
 		this.productDescription = productDescription;
 	}
-	public int getQuantityInStock() {
+	public Integer getQuantityInStock() {
 		return quantityInStock;
 	}
-	public void setQuantityInStock(int quantityInStock) {
+	public void setQuantityInStock(Integer quantityInStock) {
 		this.quantityInStock = quantityInStock;
 	}
 	public double getBuyPrice() {
@@ -71,15 +88,21 @@ public class Product {
 		this.msrp = msrp;
 	}
 	
+	public OrderDetails getOrderDetails() {
+		return orderDetails;
+	}
+	public void setOrderDetails(OrderDetails orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
 	public static class ProductBuilder {
 		
 		private String productCode; 
 		private String productName;
-		private String productLine;
 		private String productScale;
 		private String productVendor;
 		private String productDescription;
-		private int quantityInStock;
+		private Integer quantityInStock;
 		private double buyPrice;
 		private double msrp;
 		
@@ -94,11 +117,6 @@ public class Product {
 
 		public ProductBuilder setProductName(String productName) {
 			this.productName = productName;
-			return this;
-		}
-
-		public ProductBuilder setProductLine(String productLine) {
-			this.productLine = productLine;
 			return this;
 		}
 
@@ -117,7 +135,7 @@ public class Product {
 			return this;
 		}
 
-		public ProductBuilder setQuantityInStock(int quantityInStock) {
+		public ProductBuilder setQuantityInStock(Integer quantityInStock) {
 			this.quantityInStock = quantityInStock;
 			return this;
 		}
@@ -136,7 +154,6 @@ public class Product {
 			Product product = new Product();
 			product.productCode = this.productCode;
 			product.productName = this.productName;
-			product.productLine = this.productLine;
 			product.productScale = this.productScale;
 			product.productVendor = this.productVendor;
 			product.productDescription = this.productDescription;
