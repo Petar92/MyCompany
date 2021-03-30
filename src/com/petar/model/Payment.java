@@ -1,15 +1,34 @@
 package com.petar.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Payment {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+@Entity (name="payments")
+public class Payment implements Serializable{
 	
 	private Payment() {
 		//private constructor so that the object cannot be instantiated
 	}
 	
+	@Id
 	private int customerNumber;
+	
+	@Id
 	private String checkNumber;
+	
+	@OneToOne(mappedBy = "payment")
+	@PrimaryKeyJoinColumn
+	@NotFound(action=NotFoundAction.IGNORE)
+	private Customer customer;
+	
 	private Date paymentDate;
 	private double amount;
 	

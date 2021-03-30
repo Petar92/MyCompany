@@ -1,22 +1,44 @@
 package com.petar.model;
 
-public class OrderDetails {
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+@Entity (name = "orderdetails")
+public class OrderDetails implements Serializable{
 	
-	private int orderNumber;
+	@Id @GeneratedValue
+	private Integer orderNumber;
+	@Id @GeneratedValue
 	private String productCode;
-	private int quantityOrdered;
+	private Integer quantityOrdered;
 	private double priceEach;
-	private int orderLineNumber;
+	private Integer orderLineNumber;
+	
+	@OneToOne(mappedBy = "orderDetails")
+	@Cascade(value = { CascadeType.ALL })
+	@PrimaryKeyJoinColumn
+	@NotFound(action=NotFoundAction.IGNORE)
+	private Order order;
 	
 	private OrderDetails() {
 		//private constructor so that the object cannot be instantiated
 	}
 
-	public int getOrderNumber() {
+	public Integer getOrderNumber() {
 		return orderNumber;
 	}
 
-	public void setOrderNumber(int orderNumber) {
+	public void setOrderNumber(Integer orderNumber) {
 		this.orderNumber = orderNumber;
 	}
 
@@ -28,11 +50,11 @@ public class OrderDetails {
 		this.productCode = productCode;
 	}
 
-	public int getQuantityOrdered() {
+	public Integer getQuantityOrdered() {
 		return quantityOrdered;
 	}
 
-	public void setQuantityOrdered(int quantityOrdered) {
+	public void setQuantityOrdered(Integer quantityOrdered) {
 		this.quantityOrdered = quantityOrdered;
 	}
 
@@ -44,27 +66,27 @@ public class OrderDetails {
 		this.priceEach = priceEach;
 	}
 
-	public int getOrderLineNumber() {
+	public Integer getOrderLineNumber() {
 		return orderLineNumber;
 	}
 
-	public void setOrderLineNumber(int orderLineNumber) {
+	public void setOrderLineNumber(Integer orderLineNumber) {
 		this.orderLineNumber = orderLineNumber;
 	}
 	
 	public static class OrderDetailBuilder {
 		
-		private int orderNumber;
+		private Integer orderNumber;
 		private String productCode;
-		private int quantityOrdered;
+		private Integer quantityOrdered;
 		private double priceEach;
-		private int orderLineNumber;
+		private Integer orderLineNumber;
 		
-		public OrderDetailBuilder(int orderNumber) {
+		public OrderDetailBuilder(Integer orderNumber) {
 			this.orderNumber = orderNumber;
 		}
 
-		public OrderDetailBuilder setOrderNumber(int orderNumber) {
+		public OrderDetailBuilder setOrderNumber(Integer orderNumber) {
 			this.orderNumber = orderNumber;
 			return this;
 		}
@@ -74,7 +96,7 @@ public class OrderDetails {
 			return this;
 		}
 
-		public OrderDetailBuilder setQuantityOrdered(int quantityOrdered) {
+		public OrderDetailBuilder setQuantityOrdered(Integer quantityOrdered) {
 			this.quantityOrdered = quantityOrdered;
 			return this;
 		}
@@ -84,7 +106,7 @@ public class OrderDetails {
 			return this;
 		}
 
-		public OrderDetailBuilder setOrderLineNumber(int orderLineNumber) {
+		public OrderDetailBuilder setOrderLineNumber(Integer orderLineNumber) {
 			this.orderLineNumber = orderLineNumber;
 			return this;
 		}

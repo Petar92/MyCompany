@@ -63,6 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
 		session.beginTransaction();
 		@SuppressWarnings("unchecked")
 		List<Customer> customers = (List<Customer>) session.createNativeQuery("SELECT * FROM customers").addScalar("customerNumber").addScalar("customerName").list();
+		System.out.println("TIP SVIH TIPOVA " + session.createNativeQuery("SELECT * FROM customers;").addScalar("customerNumber").addScalar("customerName").list().getClass());
 		session.getTransaction().commit();
 		session.close();
 		return customers;

@@ -2,16 +2,52 @@ package com.petar.model;
 
 import java.sql.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
+@Entity (name="orders")
 public class Order {
 	
+	@Id
 	private int orderNumber;
 	private Date orderDate;
 	private Date requiredDate;
 	private Date shippedDate;
 	private String status;
 	private String comments;
-	private int customerNumber;
 	
+	@ManyToOne
+	@Cascade(value = { CascadeType.ALL })
+	@JoinColumn(name = "customerNumber")
+	private Customer customer;
+
+	@ManyToOne
+	@Cascade(value = { CascadeType.ALL })
+	@JoinColumns({
+		@JoinColumn(name = "orderNumber", insertable = false, updatable = false),
+		@JoinColumn(name = "productCode", insertable = false, updatable = false)
+	})
+	@NotFound(action=NotFoundAction.IGNORE)
+	private OrderDetails orderDetails;
+	
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
 	private Order() {
 		//private constructor so that the object cannot be instantiated
 	}
@@ -62,14 +98,6 @@ public class Order {
 
 	public void setComments(String comments) {
 		this.comments = comments;
-	}
-
-	public int getCustomerNumber() {
-		return customerNumber;
-	}
-
-	public void setCustomerNumber(int customerNumber) {
-		this.customerNumber = customerNumber;
 	}
 	
 	public static class OrderBuilder {
@@ -129,7 +157,6 @@ public class Order {
 			order.shippedDate = this.shippedDate;
 			order.status = this.status;
 			order.comments = this.comments;
-			order.customerNumber = this.customerNumber;
 			
 			return order;
 		}

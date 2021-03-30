@@ -1,7 +1,19 @@
 package com.petar.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Entity (name="customers")
 public class Customer {
@@ -21,7 +33,28 @@ public class Customer {
 	private String postalCode;
 	private String country;
 	private int salesRepEmployeeNumber;
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
 	private double creditLimit;
+	
+	@OneToMany(mappedBy = "customer")
+	@Cascade(value = { CascadeType.ALL })
+	List<Order> orders = new ArrayList<Order>();
+	
+	@ManyToOne
+	@Cascade(value = { CascadeType.ALL })
+	@JoinColumns({
+		@JoinColumn(name = "customerNumber", insertable = false, updatable = false),
+		@JoinColumn(name = "checkNumber", insertable = false, updatable = false)
+	})
+	@NotFound(action=NotFoundAction.IGNORE)
+	private Payment payment;
 	
 	public int getCustomerNumber() {
 		return customerNumber;

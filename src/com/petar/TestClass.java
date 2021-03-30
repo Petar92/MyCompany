@@ -22,7 +22,8 @@ public class TestClass {
 										.setSalesRepEmployeeNumber(1370)
 										.setState("Srbija")
 										.build();
-		service.addCustomer(customer);
+		//service.addCustomer(customer);
+		service.deleteCustomer(103);
 
 	}
 
