@@ -1,2 +1,2 @@
 hibernate.cfg.xml
-build
+build/*
