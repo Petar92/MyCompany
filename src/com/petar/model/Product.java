@@ -38,66 +38,81 @@ public class Product {
 	public String getProductCode() {
 		return productCode;
 	}
+
 	public void setProductCode(String productCode) {
-		System.out.println("SETTING PRODUCT CODE TO " + productCode);
 		this.productCode = productCode;
 	}
+
 	public String getProductName() {
 		return productName;
 	}
+
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
+
 	public String getProductScale() {
 		return productScale;
 	}
+
 	public void setProductScale(String productScale) {
 		this.productScale = productScale;
 	}
+
 	public String getProductVendor() {
 		return productVendor;
 	}
+
 	public void setProductVendor(String productVendor) {
 		this.productVendor = productVendor;
 	}
+
 	public String getProductDescription() {
 		return productDescription;
 	}
+
 	public void setProductDescription(String productDescription) {
 		this.productDescription = productDescription;
 	}
+
 	public Integer getQuantityInStock() {
 		return quantityInStock;
 	}
+
 	public void setQuantityInStock(Integer quantityInStock) {
 		this.quantityInStock = quantityInStock;
 	}
+
 	public double getBuyPrice() {
 		return buyPrice;
 	}
+
 	public void setBuyPrice(double buyPrice) {
 		this.buyPrice = buyPrice;
 	}
+
 	public double getMsrp() {
 		return msrp;
 	}
+
 	public void setMsrp(double msrp) {
 		this.msrp = msrp;
 	}
-	
+
 	public OrderDetails getOrderDetails() {
 		return orderDetails;
 	}
+
 	public void setOrderDetails(OrderDetails orderDetails) {
 		this.orderDetails = orderDetails;
 	}
-	
-	public String getProductLine() {
-		return productLine.getProductLine();
+
+	public ProductLine getProductLine() {
+		return productLine;
 	}
-	
-	public void setProudctLine(String productLine) {
-		this.productLine.setProductLine(productLine);
+
+	public void setProductLine(ProductLine productLine) {
+		this.productLine = productLine;
 	}
 
 	public static class ProductBuilder {
@@ -110,10 +125,10 @@ public class Product {
 		private Integer quantityInStock;
 		private double buyPrice;
 		private double msrp;
+		private OrderDetails orderDetails;
 		private ProductLine productLine;
 		
 		public ProductBuilder(String productCode) {
-			System.out.println("SETTING PRODUCT CODE TO " + productCode);
 			this.productCode = productCode;
 		}
 
@@ -157,8 +172,13 @@ public class Product {
 			return this;
 		}
 		
-		public ProductBuilder setProductLine(String productLine) {
-			this.productLine.setProductLine(productLine);
+		public ProductBuilder setOrderDetails(OrderDetails orderDetails) {
+			this.orderDetails = orderDetails;
+			return this;
+		}
+		
+		public ProductBuilder setProductLine(ProductLine productLine) {
+			this.productLine = productLine;
 			return this;
 		}
 		
@@ -173,6 +193,7 @@ public class Product {
 			product.buyPrice = this.buyPrice;
 			product.msrp = this.msrp;
 			product.productLine = this.productLine;
+			product.orderDetails = this.orderDetails;
 			
 			return product;
 		}

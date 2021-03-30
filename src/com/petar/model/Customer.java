@@ -130,14 +130,6 @@ public class Customer {
 		this.country = country;
 	}
 
-	public Integer getSalesRepEmployeeNumber() {
-		return employee.getEmployeeNumber();
-	}
-
-	public void setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
-		employee.setEmployeeNumber(salesRepEmployeeNumber);;
-	}
-
 	public double getCreditLimit() {
 		return creditLimit;
 	}
@@ -145,7 +137,7 @@ public class Customer {
 	public void setCreditLimit(double creditLimit) {
 		this.creditLimit = creditLimit;
 	}
-	
+
 	public Employee getEmployee() {
 		return employee;
 	}
@@ -184,9 +176,15 @@ public class Customer {
 		private String country;
 		private Employee employee;
 		private double creditLimit;
+		private List<Order> orders;
+		private Payment payment;
 		
-		public CustomerBuilder(Integer customerNumber) {
+		public CustomerBuilder() {
+		}
+		
+		public CustomerBuilder setCustomerNumber(Integer customerNumber) {
 			this.customerNumber = customerNumber;
+			return this;
 		}
 		
 		public CustomerBuilder setName(String customerName) {
@@ -239,13 +237,23 @@ public class Customer {
 			return this;
 		}
 		
-		public CustomerBuilder setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
-			this.employee.setEmployeeNumber(salesRepEmployeeNumber);
+		public CustomerBuilder setEmployee(Employee employee) {
+			this.employee = employee;
 			return this;
 		}
 		
 		public CustomerBuilder setCreditLimit(double creditLimit) {
 			this.creditLimit = creditLimit;
+			return this;
+		}
+		
+		public CustomerBuilder setOrders(List<Order> orders) {
+			this.orders = orders;
+			return this;
+		}
+		
+		public CustomerBuilder setPayment(Payment payment) {
+			this.payment = payment;
 			return this;
 		}
 		
@@ -264,6 +272,8 @@ public class Customer {
 			customer.country = this.country;
 			customer.employee = this.employee;
 			customer.creditLimit = this.creditLimit;
+			customer.orders = this.orders;
+			customer.payment = this.payment;
 			
 			return customer;
 		}

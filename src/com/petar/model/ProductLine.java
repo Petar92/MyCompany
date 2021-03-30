@@ -65,25 +65,35 @@ public class ProductLine {
 		private String textDescription;
 		private String htmlDescription;
 		private byte[] image;
+		private List<Product> products;
 		
 		public ProductLineBuilder(String productLine) {
 			this.productLine = productLine;
 		}
 
-		public void setProductLine(String productLine) {
+		public ProductLineBuilder setProductLine(String productLine) {
 			this.productLine = productLine;
+			return this;
 		}
 
-		public void setTextDescription(String textDescription) {
+		public ProductLineBuilder setTextDescription(String textDescription) {
 			this.textDescription = textDescription;
+			return this;
 		}
 
-		public void setHtmlDescription(String htmlDescription) {
+		public ProductLineBuilder setHtmlDescription(String htmlDescription) {
 			this.htmlDescription = htmlDescription;
+			return this;
 		}
 
-		public void setImage(byte[] image) {
+		public ProductLineBuilder setImage(byte[] image) {
 			this.image = image;
+			return this;
+		}
+		
+		public ProductLineBuilder setProducts(List<Product> products) {
+			this.products = products;
+			return this;
 		}
 		
 		public ProductLine build() {
@@ -92,6 +102,7 @@ public class ProductLine {
 			productLine.textDescription = this.textDescription;
 			productLine.htmlDescription = this.htmlDescription;
 			productLine.image = this.image;
+			productLine.products = this.products;
 			
 			return productLine;
 		}

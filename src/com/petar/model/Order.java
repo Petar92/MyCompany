@@ -40,7 +40,6 @@ public class Order {
 	}
 
 	public void setOrderNumber(Integer orderNumber) {
-		System.out.println("SETTING ORDER NUMBER TO " + orderNumber);
 		this.orderNumber = orderNumber;
 	}
 
@@ -83,21 +82,21 @@ public class Order {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
 	public OrderDetails getOrderDetails() {
 		return orderDetails;
 	}
 
 	public void setOrderDetails(OrderDetails orderDetails) {
 		this.orderDetails = orderDetails;
-	}
-
-	public Integer getCustomerNumber() {
-		return customer.getCustomerNumber();
-	}
-
-	public void setCustomerNumber(Integer customerNumber) {
-		customer.setCustomerNumber(customerNumber);;
 	}
 
 	public static class OrderBuilder {
@@ -145,8 +144,8 @@ public class Order {
 			return this;
 		}
 		
-		public OrderBuilder setCustomerNumber(Integer customerNumber) {
-			customer.setCustomerNumber(customerNumber);
+		public OrderBuilder setCustomer(Customer customer) {
+			this.customer = customer;
 			return this;
 		}
 		

@@ -114,12 +114,12 @@ public class Employee {
 		this.customers = customers;
 	}
 
-	public String getOfficeCode() {
-		return office.getOfficeCode();
+	public Office getOffice() {
+		return office;
 	}
 
-	public void setOfficeCode(String officeCode) {
-		office.setOfficeCode(officeCode);;
+	public void setOffice(Office office) {
+		this.office = office;
 	}
 
 	public static class EmployeeBuilder {
@@ -131,9 +131,10 @@ public class Employee {
 		private String email;
 		private Employee employee;
 		private List<Employee> employees;
-		private String officeCode;
+		private Office office;
 		//private Integer reportsTo;
 		private String jobTitle;
+		private List<Customer> customers;
 		
 		public EmployeeBuilder(Integer employeeNumber) {
 			this.employeeNumber = employeeNumber;
@@ -159,8 +160,8 @@ public class Employee {
 			this.email = email;
 			return this;
 		}
-		public EmployeeBuilder setOfficeCode(String officeCode) {
-			this.officeCode = officeCode;
+		public EmployeeBuilder setOffice(Office office) {
+			this.office = office;
 			return this;
 		}
 //		public EmployeeBuilder setReportsTo(Integer reportsTo) {
@@ -182,6 +183,11 @@ public class Employee {
 			return this;
 		}
 		
+		public EmployeeBuilder setCustomers(List<Customer> customers) {
+			this.customers = customers;
+			return this;
+		}
+		
 		public Employee build() {
 			Employee employee = new Employee();
 			employee.employeeNumber = this.employeeNumber;
@@ -189,11 +195,12 @@ public class Employee {
 			employee.firstName = this.firstName;
 			employee.extension = this.extension;
 			employee.email = this.email;
-			//employee.officeC = this.office;
+			employee.office = this.office;
 			//employee.reportsTo = this.reportsTo;
 			employee.jobTitle = this.jobTitle;
 			employee.employee = this.employee;
 			employee.employees = this.employees;
+			employee.customers = this.customers;
 			return employee;
 		}
 		

@@ -15,10 +15,15 @@ import com.petar.model.Customer;
 
 @WebService(endpointInterface="com.petar.service.CustomerService", portName="CustomerPort", serviceName="CustomerService")
 public class CustomerServiceImpl implements CustomerService {
+	
+	private SessionFactory sessionFactory = null;
+	
+	public CustomerServiceImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 
 	@Override
 	public boolean addCustomer(Customer customer) {
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.save(customer);
@@ -30,7 +35,6 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public boolean deleteCustomer(Integer id) {
 		boolean result = false;
-		SessionFactory sessionFactory = null;
 		try {
 			sessionFactory = new Configuration().configure().buildSessionFactory();
 		} catch (Throwable ex) {
@@ -52,7 +56,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public Customer getCustomer(int id) {
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Customer customer = new Customer.CustomerBuilder(id).build();
@@ -65,7 +68,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public List<Customer> getAllCustomers() {
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();		
 		Query<Customer> query = session.createQuery("from com.petar.model.Customer");

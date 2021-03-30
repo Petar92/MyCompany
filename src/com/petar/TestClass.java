@@ -3,6 +3,9 @@ package com.petar;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
 import com.petar.model.Customer;
 import com.petar.model.Employee;
 import com.petar.service.CustomerService;
@@ -13,10 +16,11 @@ import com.petar.service.EmployeeServiceImpl;
 public class TestClass {
 
 	public static void main(String[] args) {
+		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		List<Customer> customers = new ArrayList<Customer>();
 		List<Employee> employees = new ArrayList<Employee>();
-		CustomerService service = new CustomerServiceImpl();
-		EmployeeService empService = new EmployeeServiceImpl();
+		CustomerService service = new CustomerServiceImpl(sessionFactory);
+		EmployeeService empService = new EmployeeServiceImpl(sessionFactory);
 		Customer customer = new Customer.CustomerBuilder(3)
 										.setAddressLine1("addres 1")
 										.setAddressLine2("address 2")
@@ -38,8 +42,8 @@ public class TestClass {
 										.setLastName("Repic")
 										.setOfficeCode("BGD")
 										.build();
-		//service.addCustomer(customer);
-		service.deleteCustomer(103);
+		service.addCustomer(customer);
+		//service.deleteCustomer(103);
 		//service.getCustomer(1);
 //		customers = service.getAllCustomers();
 //		int count = 0;

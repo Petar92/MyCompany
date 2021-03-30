@@ -15,10 +15,20 @@ import com.petar.model.Employee;
 
 @WebService(endpointInterface="com.petar.service.EmployeeService", portName="EmployeePort", serviceName="EmployeeService")
 public class EmployeeServiceImpl implements EmployeeService {
+	
+	SessionFactory sessionFactory = null;
+	
+	public EmployeeServiceImpl(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
+	
+//	public void init() {
+//		sessionFactory = new Configuration().configure().buildSessionFactory();
+//	}
 
 	@Override
 	public boolean addEmployee(Employee employee) {
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		session.save(employee);
@@ -30,13 +40,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public boolean deleteEmployee(Integer id) {
 		boolean result = false;
-		SessionFactory sessionFactory = null;
-		try {
-			sessionFactory = new Configuration().configure().buildSessionFactory();
-		} catch (Throwable ex) {
-			System.err.println("Initial SessionFactory creation failed. " + ex);
-			ex.printStackTrace();
-		}
+//		try {
+//			sessionFactory = new Configuration().configure().buildSessionFactory();
+//		} catch (Throwable ex) {
+//			System.err.println("Initial SessionFactory creation failed. " + ex);
+//			ex.printStackTrace();
+//		}
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Serializable id2 = id;
@@ -52,7 +61,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee getEmployee(int id) {
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		Employee employee = new Employee.EmployeeBuilder(id).build();
@@ -65,7 +73,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> getAllEmployees() {
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();		
 		Query<Employee> query = session.createQuery("from com.petar.model.Employee");

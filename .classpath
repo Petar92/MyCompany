@@ -18,5 +18,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Hibernate2"/>
 	<classpathentry kind="lib" path="/home/petar/misc/mysql-connector-java-8.0.21-sources.jar"/>
 	<classpathentry kind="lib" path="/home/petar/misc/mysql-connector-java-8.0.11.jar"/>
+	<classpathentry kind="lib" path="/home/petar/Misc/javax.jws-api-1.1.jar"/>
+	<classpathentry kind="lib" path="/home/petar/Misc/mysql-connector-java-8.0.11.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

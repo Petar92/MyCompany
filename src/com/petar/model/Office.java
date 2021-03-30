@@ -106,6 +106,7 @@ public class Office {
 		private String country;
 		private String postalCode;
 		private String territory;
+		private List<Employee> employees;
 		
 		public OfficeBuilder(String officeCode) {
 			this.officeCode = officeCode;
@@ -156,6 +157,11 @@ public class Office {
 			return this;
 		}
 		
+		public OfficeBuilder setEmployees(List<Employee> employees) {
+			this.employees = employees;
+			return this;
+		}
+		
 		public Office build() {
 			Office office = new Office();
 			office.officeCode = this.officeCode;
@@ -167,6 +173,7 @@ public class Office {
 			office.country = this.country;
 			office.postalCode = this.postalCode;
 			office.territory = this.territory;
+			office.employees = this.employees;
 			
 			return office;
 		}
