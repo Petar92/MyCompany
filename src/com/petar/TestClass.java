@@ -21,7 +21,7 @@ public class TestClass {
 		List<Employee> employees = new ArrayList<Employee>();
 		CustomerService service = new CustomerServiceImpl(sessionFactory);
 		EmployeeService empService = new EmployeeServiceImpl(sessionFactory);
-		Customer customer = new Customer.CustomerBuilder(3)
+		Customer customer = new Customer.CustomerBuilder()
 										.setAddressLine1("addres 1")
 										.setAddressLine2("address 2")
 										.setCity("Loznica")
@@ -40,11 +40,10 @@ public class TestClass {
 										.setFirstName("Petar")
 										.setJobTitle("master of disaster")
 										.setLastName("Repic")
-										.setOfficeCode("BGD")
 										.build();
-		service.addCustomer(customer);
-		//service.deleteCustomer(103);
-		//service.getCustomer(1);
+		//service.addCustomer(customer);
+		//service.deleteCustomer(5);
+		//service.getCustomer(489);
 //		customers = service.getAllCustomers();
 //		int count = 0;
 //		for (Customer customer2 : customers) {

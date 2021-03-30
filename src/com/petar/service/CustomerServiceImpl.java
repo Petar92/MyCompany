@@ -58,7 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public Customer getCustomer(int id) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
-		Customer customer = new Customer.CustomerBuilder(id).build();
+		Customer customer = new Customer.CustomerBuilder().build();
 		customer = (Customer) session.get(Customer.class, id);		
 		session.getTransaction().commit();
 		session.close();
