@@ -2,23 +2,37 @@ package com.petar.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 
 @Entity (name="orderdetails")
 public class OrderDetails implements Serializable{
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id //@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer orderNumber;
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id //@GeneratedValue(strategy = GenerationType.AUTO)
 	private String productCode;
 	
 	private Integer quantityOrdered;
 	private double priceEach;
 	private Integer orderLineNumber;
+	
+	@OneToOne
+	@JoinColumn(name = "orderNumber")
+	@MapsId
+	private Order order;
+	
+	@OneToOne
+	@JoinColumn(name = "productCode")
+	@MapsId
+	private Product product;
 	
 	private OrderDetails() {
 		//private constructor so that the object cannot be instantiated
@@ -29,6 +43,7 @@ public class OrderDetails implements Serializable{
 	}
 
 	public void setOrderNumber(Integer orderNumber) {
+		System.out.println("SETTING ORDER NUMBER TO " + orderNumber);
 		this.orderNumber = orderNumber;
 	}
 
@@ -37,6 +52,7 @@ public class OrderDetails implements Serializable{
 	}
 
 	public void setProductCode(String productCode) {
+		System.out.println("SETTING PRODUCT CODE TO " + productCode);
 		this.productCode = productCode;
 	}
 
@@ -77,11 +93,13 @@ public class OrderDetails implements Serializable{
 		}
 
 		public OrderDetailBuilder setOrderNumber(Integer orderNumber) {
+			System.out.println("SETTING ORDER NUMBER TO " + orderNumber);
 			this.orderNumber = orderNumber;
 			return this;
 		}
 
 		public OrderDetailBuilder setProductCode(String productCode) {
+			System.out.println("SETTING PRODUCT CODE TO " + productCode);
 			this.productCode = productCode;
 			return this;
 		}

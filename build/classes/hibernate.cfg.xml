@@ -9,7 +9,7 @@
     <!-- property name="connection.driver_class">com.mysql.jdbc.Driver</property -->
     <property name="connection.url">jdbc:mysql://localhost/classicmodels</property>
     <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
-    <property name="connection.username">petar</property>
+    <property name="connection.username">root</property>
     <property name="connection.password">rijektmaster</property>
     <property name="connection.pool_size">3</property>
     <!--property name="dialect">org.hibernate.dialect.MySQLDialect</property-->
@@ -18,11 +18,11 @@
     <property name="format_sql">true</property>
     <property name="hbm2ddl.auto">update</property>
     <mapping class="com.petar.model.Customer" />
-    <mapping class="com.petar.model.Employee" />
     <mapping class="com.petar.model.Order" />
     <mapping class="com.petar.model.Payment" />
-    <mapping class="com.petar.model.Office" />
     <mapping class="com.petar.model.OrderDetails" />
+    <mapping class="com.petar.model.Employee" />
+    <mapping class="com.petar.model.Office" />
     <mapping class="com.petar.model.Product" />
     <mapping class="com.petar.model.ProductLine" />
   </session-factory>

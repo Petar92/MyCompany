@@ -24,15 +24,11 @@ public class Order {
 	private String status;
 	private String comments;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="customerNumber")
 	private Customer customer;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumns({
-		@JoinColumn(), //name="orderNumber"),
-		@JoinColumn(name="productCode")
-	})
+	@OneToOne(mappedBy = "order")
 	private OrderDetails orderDetails;
 	
 	private Order() {
@@ -44,6 +40,7 @@ public class Order {
 	}
 
 	public void setOrderNumber(Integer orderNumber) {
+		System.out.println("SETTING ORDER NUMBER TO " + orderNumber);
 		this.orderNumber = orderNumber;
 	}
 
@@ -95,12 +92,12 @@ public class Order {
 		this.orderDetails = orderDetails;
 	}
 
-	public Customer getCustomer() {
-		return customer;
+	public Integer getCustomerNumber() {
+		return customer.getCustomerNumber();
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setCustomerNumber(Integer customerNumber) {
+		customer.setCustomerNumber(customerNumber);;
 	}
 
 	public static class OrderBuilder {
@@ -111,12 +108,14 @@ public class Order {
 		private Date shippedDate;
 		private String status;
 		private String comments;
+		private Customer customer;
 		
 		public OrderBuilder(Integer orderNumber) {
 			this.orderNumber = orderNumber;
 		}
 
 		public OrderBuilder setOrderNumber(Integer orderNumber) {
+			System.out.println("SETTING ORDER NUMBER TO " + orderNumber);
 			this.orderNumber = orderNumber;
 			return this;
 		}
@@ -146,6 +145,11 @@ public class Order {
 			return this;
 		}
 		
+		public OrderBuilder setCustomerNumber(Integer customerNumber) {
+			customer.setCustomerNumber(customerNumber);
+			return this;
+		}
+		
 		public Order build() {
 			Order order = new Order();
 			order.orderNumber = this.orderNumber;
@@ -154,6 +158,7 @@ public class Order {
 			order.shippedDate = this.shippedDate;
 			order.status = this.status;
 			order.comments = this.comments;
+			order.customer = this.customer;
 			
 			return order;
 		}

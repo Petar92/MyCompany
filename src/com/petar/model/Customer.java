@@ -5,18 +5,13 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 @Entity (name="customers")
 public class Customer {
@@ -35,27 +30,18 @@ public class Customer {
 	private String state;
 	private String postalCode;
 	private String country;
+	private double creditLimit;	
 	
-	
-	
-	@ManyToOne
-	@JoinColumn(name="employeeNumber")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="salesRepEmployeeNumber")
 	private Employee employee;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumns({
-		@JoinColumn(), //name="customerNumber"),
-		@JoinColumn(name="checkNumber")
-	})
 	private Payment payment;
 	
 	@OneToMany(mappedBy="customer", cascade = CascadeType.ALL)
 	List<Order> orders = new ArrayList<Order>();
-	
-	private Integer salesRepEmployeeNumber;
-	
-	private double creditLimit;
-	
+		
 	public Integer getCustomerNumber() {
 		return customerNumber;
 	}
@@ -149,7 +135,7 @@ public class Customer {
 	}
 
 	public void setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
-		this.salesRepEmployeeNumber = salesRepEmployeeNumber;
+		employee.setEmployeeNumber(salesRepEmployeeNumber);;
 	}
 
 	public double getCreditLimit() {
@@ -196,7 +182,7 @@ public class Customer {
 		private String state;
 		private String postalCode;
 		private String country;
-		private Integer salesRepEmployeeNumber;
+		private Employee employee;
 		private double creditLimit;
 		
 		public CustomerBuilder(Integer customerNumber) {
@@ -254,7 +240,7 @@ public class Customer {
 		}
 		
 		public CustomerBuilder setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
-			this.salesRepEmployeeNumber = salesRepEmployeeNumber;
+			this.employee.setEmployeeNumber(salesRepEmployeeNumber);
 			return this;
 		}
 		
@@ -276,7 +262,7 @@ public class Customer {
 			customer.state = this.state;
 			customer.postalCode = this.postalCode;
 			customer.country = this.country;
-			customer.salesRepEmployeeNumber = this.salesRepEmployeeNumber;
+			customer.employee = this.employee;
 			customer.creditLimit = this.creditLimit;
 			
 			return customer;

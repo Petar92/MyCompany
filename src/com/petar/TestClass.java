@@ -17,7 +17,7 @@ public class TestClass {
 		List<Employee> employees = new ArrayList<Employee>();
 		CustomerService service = new CustomerServiceImpl();
 		EmployeeService empService = new EmployeeServiceImpl();
-		Customer customer = new Customer.CustomerBuilder(11111)
+		Customer customer = new Customer.CustomerBuilder(3)
 										.setAddressLine1("addres 1")
 										.setAddressLine2("address 2")
 										.setCity("Loznica")
@@ -28,7 +28,6 @@ public class TestClass {
 										.setName("kupac")
 										.setPhone("123321")
 										.setPostalCode("15300")
-										.setSalesRepEmployeeNumber(1370)
 										.setState("Srbija")
 										.build();
 		Employee employee = new Employee.EmployeeBuilder(123456)
@@ -40,8 +39,8 @@ public class TestClass {
 										.setOfficeCode("BGD")
 										.build();
 		//service.addCustomer(customer);
-		//service.deleteCustomer(1);
-		//service.getCustomer(103);
+		service.deleteCustomer(103);
+		//service.getCustomer(1);
 //		customers = service.getAllCustomers();
 //		int count = 0;
 //		for (Customer customer2 : customers) {
@@ -52,7 +51,7 @@ public class TestClass {
 		
 		
 		//empService.getEmployee(1002);
-		empService.addEmployee(employee);
+		//empService.addEmployee(employee);
 		
 	}
 

@@ -28,14 +28,10 @@ public class Product {
 	private double buyPrice;
 	private double msrp;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumns({
-		@JoinColumn(name="orderNumber"),
-		@JoinColumn(), //name="productCode")
-	})
+	@OneToOne(mappedBy = "product")
 	private OrderDetails orderDetails;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="productLine")
 	private ProductLine productLine;
 	
@@ -43,6 +39,7 @@ public class Product {
 		return productCode;
 	}
 	public void setProductCode(String productCode) {
+		System.out.println("SETTING PRODUCT CODE TO " + productCode);
 		this.productCode = productCode;
 	}
 	public String getProductName() {
@@ -94,6 +91,14 @@ public class Product {
 	public void setOrderDetails(OrderDetails orderDetails) {
 		this.orderDetails = orderDetails;
 	}
+	
+	public String getProductLine() {
+		return productLine.getProductLine();
+	}
+	
+	public void setProudctLine(String productLine) {
+		this.productLine.setProductLine(productLine);
+	}
 
 	public static class ProductBuilder {
 		
@@ -105,8 +110,10 @@ public class Product {
 		private Integer quantityInStock;
 		private double buyPrice;
 		private double msrp;
+		private ProductLine productLine;
 		
 		public ProductBuilder(String productCode) {
+			System.out.println("SETTING PRODUCT CODE TO " + productCode);
 			this.productCode = productCode;
 		}
 
@@ -150,6 +157,11 @@ public class Product {
 			return this;
 		}
 		
+		public ProductBuilder setProductLine(String productLine) {
+			this.productLine.setProductLine(productLine);
+			return this;
+		}
+		
 		public Product build() {
 			Product product = new Product();
 			product.productCode = this.productCode;
@@ -160,6 +172,7 @@ public class Product {
 			product.quantityInStock = this.quantityInStock;
 			product.buyPrice = this.buyPrice;
 			product.msrp = this.msrp;
+			product.productLine = this.productLine;
 			
 			return product;
 		}

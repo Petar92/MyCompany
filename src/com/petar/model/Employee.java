@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,15 +25,14 @@ public class Employee {
 	private String firstName;
 	private String extension;
 	private String email;
-	private String officeCode;
-	private Integer reportsTo;
+	//private Integer reportsTo;
 	private String jobTitle;
 	
 	@OneToMany(mappedBy="employee", cascade = CascadeType.ALL)
 	List<Employee> employees = new ArrayList<Employee>();
 	
 	@ManyToOne
-	@JoinColumn(name="employeeNumber")
+	@JoinColumn(name="reportsTo")
 	private Employee employee;
 	
 	@OneToMany(mappedBy="employee", cascade = CascadeType.ALL)
@@ -47,77 +45,82 @@ public class Employee {
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
 	}
+
 	public void setEmployeeNumber(Integer employeeNumber) {
 		this.employeeNumber = employeeNumber;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	public String getExtension() {
 		return extension;
 	}
+
 	public void setExtension(String extension) {
 		this.extension = extension;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getOfficeCode() {
-		return officeCode;
-	}
-	public void setOfficeCode(String officeCode) {
-		this.officeCode = officeCode;
-	}
-	public Integer getReportsTo() {
-		return reportsTo;
-	}
-	public void setReportsTo(Integer reportsTo) {
-		this.reportsTo = reportsTo;
-	}
+
 	public String getJobTitle() {
 		return jobTitle;
 	}
+
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
 	}
-	
+
 	public List<Employee> getEmployees() {
 		return employees;
 	}
+
 	public void setEmployees(List<Employee> employees) {
 		this.employees = employees;
 	}
+
 	public Employee getEmployee() {
 		return employee;
 	}
+
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
+
 	public List<Customer> getCustomers() {
 		return customers;
 	}
+
 	public void setCustomers(List<Customer> customers) {
 		this.customers = customers;
 	}
-	public Office getOffice() {
-		return office;
-	}
-	public void setOffice(Office office) {
-		this.office = office;
+
+	public String getOfficeCode() {
+		return office.getOfficeCode();
 	}
 
+	public void setOfficeCode(String officeCode) {
+		office.setOfficeCode(officeCode);;
+	}
 
 	public static class EmployeeBuilder {
 		
@@ -126,8 +129,10 @@ public class Employee {
 		private String firstName;
 		private String extension;
 		private String email;
+		private Employee employee;
+		private List<Employee> employees;
 		private String officeCode;
-		private Integer reportsTo;
+		//private Integer reportsTo;
 		private String jobTitle;
 		
 		public EmployeeBuilder(Integer employeeNumber) {
@@ -158,12 +163,22 @@ public class Employee {
 			this.officeCode = officeCode;
 			return this;
 		}
-		public EmployeeBuilder setReportsTo(Integer reportsTo) {
-			this.reportsTo = reportsTo;
-			return this;
-		}
+//		public EmployeeBuilder setReportsTo(Integer reportsTo) {
+//			this.reportsTo = reportsTo;
+//			return this;
+//		}
 		public EmployeeBuilder setJobTitle(String jobTitle) {
 			this.jobTitle = jobTitle;
+			return this;
+		}
+		
+		public EmployeeBuilder setEmployee(Employee employee) {
+			this.employee = employee;
+			return this;
+		}
+		
+		public EmployeeBuilder setEmployees(List<Employee> employees) {
+			this.employees = employees;
 			return this;
 		}
 		
@@ -174,10 +189,11 @@ public class Employee {
 			employee.firstName = this.firstName;
 			employee.extension = this.extension;
 			employee.email = this.email;
-			employee.officeCode = this.officeCode;
-			employee.reportsTo = this.reportsTo;
+			//employee.officeC = this.office;
+			//employee.reportsTo = this.reportsTo;
 			employee.jobTitle = this.jobTitle;
-			
+			employee.employee = this.employee;
+			employee.employees = this.employees;
 			return employee;
 		}
 		
