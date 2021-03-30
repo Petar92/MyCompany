@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -18,24 +21,19 @@ public class Payment implements Serializable{
 		//private constructor so that the object cannot be instantiated
 	}
 	
-	@Id
-	private int customerNumber;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer customerNumber;
 	
-	@Id
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String checkNumber;
-	
-	@OneToOne(mappedBy = "payment")
-	@PrimaryKeyJoinColumn
-	@NotFound(action=NotFoundAction.IGNORE)
-	private Customer customer;
 	
 	private Date paymentDate;
 	private double amount;
 	
-	public int getCustomerNumber() {
+	public Integer getCustomerNumber() {
 		return customerNumber;
 	}
-	public void setCustomerNumber(int customerNumber) {
+	public void setCustomerNumber(Integer customerNumber) {
 		this.customerNumber = customerNumber;
 	}
 	public String getCheckNumber() {
@@ -59,16 +57,16 @@ public class Payment implements Serializable{
 	
 	public static class PaymentBuilder {
 		
-		private int customerNumber;
+		private Integer customerNumber;
 		private String checkNumber;
 		private Date paymentDate;
 		private double amount;
 		
-		public PaymentBuilder(int customerNumber) {
+		public PaymentBuilder(Integer customerNumber) {
 			this.customerNumber = customerNumber;
 		}
 
-		public PaymentBuilder setCustomerNumber(int customerNumber) {
+		public PaymentBuilder setCustomerNumber(Integer customerNumber) {
 			this.customerNumber = customerNumber;
 			return this;
 		}

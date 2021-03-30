@@ -1,15 +1,31 @@
 package com.petar.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity (name="productlines")
 public class ProductLine {
 	
 	private ProductLine() {
 		//private constructor so that the object cannot be instantiated
 	}
 	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String productLine;
+	
 	private String textDescription;
 	private String htmlDescription;
 	private byte[] image;
+	
+	@OneToMany(mappedBy="productLine", cascade = CascadeType.ALL)
+	List<Product> products = new ArrayList<Product>();
 	
 	public String getProductLine() {
 		return productLine;
@@ -36,6 +52,13 @@ public class ProductLine {
 		this.image = image;
 	}
 	
+	public List<Product> getProducts() {
+		return products;
+	}
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
 	public static class ProductLineBuilder {
 		
 		private String productLine;

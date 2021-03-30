@@ -4,31 +4,21 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
-@Entity (name = "orderdetails")
+@Entity (name="orderdetails")
 public class OrderDetails implements Serializable{
 	
-	@Id @GeneratedValue
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer orderNumber;
-	@Id @GeneratedValue
+	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String productCode;
+	
 	private Integer quantityOrdered;
 	private double priceEach;
 	private Integer orderLineNumber;
-	
-	@OneToOne(mappedBy = "orderDetails")
-	@Cascade(value = { CascadeType.ALL })
-	@PrimaryKeyJoinColumn
-	@NotFound(action=NotFoundAction.IGNORE)
-	private Order order;
 	
 	private OrderDetails() {
 		//private constructor so that the object cannot be instantiated

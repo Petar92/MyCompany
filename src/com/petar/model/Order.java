@@ -2,24 +2,22 @@ package com.petar.model;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 @Entity (name="orders")
 public class Order {
 	
-	@Id
-	private int orderNumber;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer orderNumber;
+	
 	private Date orderDate;
 	private Date requiredDate;
 	private Date shippedDate;
@@ -27,36 +25,25 @@ public class Order {
 	private String comments;
 	
 	@ManyToOne
-	@Cascade(value = { CascadeType.ALL })
-	@JoinColumn(name = "customerNumber")
+	@JoinColumn(name="customerNumber")
 	private Customer customer;
-
-	@ManyToOne
-	@Cascade(value = { CascadeType.ALL })
+	
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumns({
-		@JoinColumn(name = "orderNumber", insertable = false, updatable = false),
-		@JoinColumn(name = "productCode", insertable = false, updatable = false)
+		@JoinColumn(), //name="orderNumber"),
+		@JoinColumn(name="productCode")
 	})
-	@NotFound(action=NotFoundAction.IGNORE)
 	private OrderDetails orderDetails;
 	
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
 	private Order() {
 		//private constructor so that the object cannot be instantiated
 	}
 
-	public int getOrderNumber() {
+	public Integer getOrderNumber() {
 		return orderNumber;
 	}
 
-	public void setOrderNumber(int orderNumber) {
+	public void setOrderNumber(Integer orderNumber) {
 		this.orderNumber = orderNumber;
 	}
 
@@ -100,21 +87,36 @@ public class Order {
 		this.comments = comments;
 	}
 	
+	public OrderDetails getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(OrderDetails orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
 	public static class OrderBuilder {
 		
-		private int orderNumber;
+		private Integer orderNumber;
 		private Date orderDate;
 		private Date requiredDate;
 		private Date shippedDate;
 		private String status;
 		private String comments;
-		private int customerNumber;
 		
-		public OrderBuilder(int orderNumber) {
+		public OrderBuilder(Integer orderNumber) {
 			this.orderNumber = orderNumber;
 		}
 
-		public OrderBuilder setOrderNumber(int orderNumber) {
+		public OrderBuilder setOrderNumber(Integer orderNumber) {
 			this.orderNumber = orderNumber;
 			return this;
 		}
@@ -141,11 +143,6 @@ public class Order {
 
 		public OrderBuilder setComments(String comments) {
 			this.comments = comments;
-			return this;
-		}
-
-		public OrderBuilder setCustomerNumber(int customerNumber) {
-			this.customerNumber = customerNumber;
 			return this;
 		}
 		
