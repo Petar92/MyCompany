@@ -1,18 +1,15 @@
 package com.petar.service;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
-
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import com.petar.model.Customer;
 
 @WebService(endpointInterface="com.petar.service.CustomerService", portName="CustomerPort", serviceName="CustomerService")
@@ -34,28 +31,25 @@ public class CustomerServiceImpl implements CustomerService {
 		entityManager.close();
 		return true;
 	}
-//
-//	@Override
-//	public boolean deleteCustomer(Integer id) {
-//		boolean result = false;
-//		try {
-//			sessionFactory = new Configuration().configure().buildSessionFactory();
-//		} catch (Throwable ex) {
-//			System.err.println("Initial SessionFactory creation failed. " + ex);
-//			ex.printStackTrace();
-//		}
-//		Session session = sessionFactory.openSession();
-//		session.beginTransaction();
-//		Serializable id2 = id;
-//		Object persistentInstance = session.load(Customer.class, id2);
-//		if (persistentInstance != null) {
-//		    session.delete(persistentInstance);
-//		    result = true;
-//		}
-//		session.getTransaction().commit();
-//		session.close();
-//		return result;
-//	}
+
+	@Override
+	public boolean deleteCustomer(Customer customer) {
+		EntityManager entityManager = null;
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			entityManager.remove(entityManager.contains(customer) ? customer : entityManager.merge(customer));
+			entityManager.getTransaction().commit();
+		} catch(Exception e) {
+			System.out.println("EXCEPTION CAUGHT " + e.getClass().toString() + "\nSTACK TRACE: ");
+			e.printStackTrace();
+			return false;
+		} finally {
+			entityManager.clear();
+			entityManager.close();
+		}
+		return true;
+	}
 
 	@Override
 	public Customer getCustomer(Integer id) {
@@ -69,28 +63,30 @@ public class CustomerServiceImpl implements CustomerService {
 		System.out.println("customer: " + customer.getContactFirstName());
 		return customer;
 	}
-
-	@Override
-	public boolean deleteCustomer(Integer id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 	@Override
 	public List<Customer> getAllCustomers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Customer> customers = new ArrayList<Customer>();
+		EntityManager entityManager = null;
+		try {
+			entityManager = entityManagerFactory.createEntityManager();
+			entityManager.getTransaction().begin();
+			CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Customer> cq = cb.createQuery(Customer.class);
+			Root<Customer> rootEntry = cq.from(Customer.class);
+			CriteriaQuery<Customer> all = cq.select(rootEntry);
+			TypedQuery<Customer> allQuery = entityManager.createQuery(all);
+			customers =  allQuery.getResultList();
+			
+			entityManager.getTransaction().commit();
+		} catch(Exception e) {
+			System.out.println("EXCEPTION CAUGHT " + e.getClass().toString() + "\nSTACK TRACE: ");
+			e.printStackTrace();
+			return null;
+		} finally {
+			entityManager.clear();
+			entityManager.close();
+		}
+		return customers;
 	}
-
-//	@Override
-//	public List<Customer> getAllCustomers() {
-//		Session session = sessionFactory.openSession();
-//		session.beginTransaction();		
-//		Query<Customer> query = session.createQuery("from com.petar.model.Customer");
-//		List<Customer> customers = query.list();
-//		session.getTransaction().commit();
-//		session.close();
-//		return customers;
-//	}
-
 }

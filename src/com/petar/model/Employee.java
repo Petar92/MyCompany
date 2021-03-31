@@ -15,10 +15,6 @@ import javax.persistence.OneToMany;
 @Entity(name="employees")
 public class Employee {
 	
-	private Employee() {
-		//private constructor so that the object cannot be instantiated
-	}
-	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer employeeNumber;
 	private String lastName;
@@ -27,7 +23,15 @@ public class Employee {
 	private String email;
 	private Integer reportsTo;
 	private String jobTitle;
-	private String officeCode;
+	//private String officeCode;
+	
+	@ManyToOne(optional = false, cascade = CascadeType.ALL)
+	@JoinColumn(name = "officeCode", referencedColumnName = "officeCode")
+	private Office office;
+	
+	private Employee() {
+		//private constructor so that the object cannot be instantiated
+	}
 	
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
@@ -85,13 +89,14 @@ public class Employee {
 		this.reportsTo = reportsTo;
 	}
 
-	public String getOfficeCode() {
-		return officeCode;
+	public Office getOffice() {
+		return office;
 	}
 
-	public void setOfficeCode(String officeCode) {
-		this.officeCode = officeCode;
+	public void setOffice(Office office) {
+		this.office = office;
 	}
+
 
 	public static class EmployeeBuilder {
 		
@@ -100,7 +105,7 @@ public class Employee {
 		private String firstName;
 		private String extension;
 		private String email;		
-		private String officeCode;
+		private Office office;
 		private Integer reportsTo;
 		private String jobTitle;
 		
@@ -136,6 +141,10 @@ public class Employee {
 			this.jobTitle = jobTitle;
 			return this;
 		}
+		public EmployeeBuilder setOffice(Office office) {
+			this.office = office;
+			return this;
+		}
 		
 		public Employee build() {
 			Employee employee = new Employee();
@@ -144,7 +153,7 @@ public class Employee {
 			employee.firstName = this.firstName;
 			employee.extension = this.extension;
 			employee.email = this.email;
-			employee.officeCode = this.officeCode;
+			employee.office = this.office;
 			employee.reportsTo = this.reportsTo;
 			return employee;
 		}

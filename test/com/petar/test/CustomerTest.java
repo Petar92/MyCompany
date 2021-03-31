@@ -2,22 +2,31 @@ package com.petar.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mockito;
 
 import com.petar.model.Customer;
 import com.petar.service.CustomerServiceImpl;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CustomerTest {
 	
 	EntityManagerFactory entityManagerFactory;
 	CustomerServiceImpl service;
 	static Customer customer;
+	static Customer addedCustomer;
+	static Integer customerId;
 	   
     @BeforeClass
     public static void initializeCustomer() {
@@ -46,6 +55,7 @@ public class CustomerTest {
     }
     
     @Test
+    @Order(1)
     public void testGetCustomer() throws Exception {
         assertEquals(customer.getCustomerNumber(), service.getCustomer(103).getCustomerNumber());
         assertEquals(customer.getCustomerName(), service.getCustomer(103).getCustomerName());
@@ -63,8 +73,9 @@ public class CustomerTest {
     }
     
     @Test
+    @Order(2)
     public void testAddCustomer() throws Exception {
-    	Customer customer2 = new Customer.CustomerBuilder().setName("Vuk")
+    	addedCustomer = new Customer.CustomerBuilder().setName("Vuk")
 			    										   .setContactLastName("Prezime")
 			    										   .setContacFirstName("Ime")
 			    										   .setPhone("555-101010")
@@ -77,7 +88,25 @@ public class CustomerTest {
 			    										   .setCreditLimit(221000.00)
 			    										   .setSalesRepEmployeeNumber(1370)
 			    										   .build();
-    	assertEquals(true, service.addCustomer(customer2));
+    	customerId = addedCustomer.getCustomerNumber();
+    	System.out.println("CUSTOMER ID " + customerId);
+    	assertEquals(true, service.addCustomer(addedCustomer));
+    }
+    
+    @Test
+    @Order(3)
+    public void testDeleteCustomer() throws Exception {
+    	System.out.println("CUSTOMER ID " + customerId);
+    	Customer deletedCustomer = service.getCustomer(42);
+    	assertEquals(true, service.deleteCustomer(deletedCustomer));
+    }
+    
+    @Test
+    @Order(4)
+    public void testGetAllCustomers() throws Exception {
+    	List<Customer> customers = new ArrayList<Customer>();
+    	customers = service.getAllCustomers();
+    	assertEquals(124, customers.size());
     }
     
     
