@@ -24,9 +24,6 @@ public class Office {
 	private String postalCode;
 	private String territory;
 	
-	@OneToMany(mappedBy = "office", cascade = CascadeType.ALL)
-	private List<Employee> employees = new ArrayList<Employee>();
-	
 	private Office() {
 		//private constructor so that the object cannot be instantiated
 	}
@@ -85,15 +82,6 @@ public class Office {
 	public void setTerritory(String territory) {
 		this.territory = territory;
 	}
-	
-	public List<Employee> getEmployees() {
-		return employees;
-	}
-
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
-	}
-
 
 	public static class OfficeBuilder {
 		
@@ -106,7 +94,6 @@ public class Office {
 		private String country;
 		private String postalCode;
 		private String territory;
-		private List<Employee> employees;
 		
 		public OfficeBuilder(String officeCode) {
 			this.officeCode = officeCode;
@@ -157,11 +144,6 @@ public class Office {
 			return this;
 		}
 		
-		public OfficeBuilder setEmployees(List<Employee> employees) {
-			this.employees = employees;
-			return this;
-		}
-		
 		public Office build() {
 			Office office = new Office();
 			office.officeCode = this.officeCode;
@@ -173,7 +155,6 @@ public class Office {
 			office.country = this.country;
 			office.postalCode = this.postalCode;
 			office.territory = this.territory;
-			office.employees = this.employees;
 			
 			return office;
 		}

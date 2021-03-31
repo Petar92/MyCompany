@@ -25,22 +25,9 @@ public class Employee {
 	private String firstName;
 	private String extension;
 	private String email;
-	//private Integer reportsTo;
+	private Integer reportsTo;
 	private String jobTitle;
-	
-	@OneToMany(mappedBy="employee", cascade = CascadeType.ALL)
-	List<Employee> employees = new ArrayList<Employee>();
-	
-	@ManyToOne
-	@JoinColumn(name="reportsTo")
-	private Employee employee;
-	
-	@OneToMany(mappedBy="employee", cascade = CascadeType.ALL)
-	List<Customer> customers = new ArrayList<Customer>();
-	
-	@ManyToOne
-	@JoinColumn(name="officeCode")
-	private Office office;
+	private String officeCode;
 	
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
@@ -90,36 +77,20 @@ public class Employee {
 		this.jobTitle = jobTitle;
 	}
 
-	public List<Employee> getEmployees() {
-		return employees;
+	public Integer getReportsTo() {
+		return reportsTo;
 	}
 
-	public void setEmployees(List<Employee> employees) {
-		this.employees = employees;
+	public void setReportsTo(Integer reportsTo) {
+		this.reportsTo = reportsTo;
 	}
 
-	public Employee getEmployee() {
-		return employee;
+	public String getOfficeCode() {
+		return officeCode;
 	}
 
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
-
-	public List<Customer> getCustomers() {
-		return customers;
-	}
-
-	public void setCustomers(List<Customer> customers) {
-		this.customers = customers;
-	}
-
-	public Office getOffice() {
-		return office;
-	}
-
-	public void setOffice(Office office) {
-		this.office = office;
+	public void setOfficeCode(String officeCode) {
+		this.officeCode = officeCode;
 	}
 
 	public static class EmployeeBuilder {
@@ -128,13 +99,10 @@ public class Employee {
 		private String lastName;
 		private String firstName;
 		private String extension;
-		private String email;
-		private Employee employee;
-		private List<Employee> employees;
-		private Office office;
-		//private Integer reportsTo;
+		private String email;		
+		private String officeCode;
+		private Integer reportsTo;
 		private String jobTitle;
-		private List<Customer> customers;
 		
 		public EmployeeBuilder(Integer employeeNumber) {
 			this.employeeNumber = employeeNumber;
@@ -160,31 +128,12 @@ public class Employee {
 			this.email = email;
 			return this;
 		}
-		public EmployeeBuilder setOffice(Office office) {
-			this.office = office;
+		public EmployeeBuilder setReportsTo(Integer reportsTo) {
+			this.reportsTo = reportsTo;
 			return this;
 		}
-//		public EmployeeBuilder setReportsTo(Integer reportsTo) {
-//			this.reportsTo = reportsTo;
-//			return this;
-//		}
 		public EmployeeBuilder setJobTitle(String jobTitle) {
 			this.jobTitle = jobTitle;
-			return this;
-		}
-		
-		public EmployeeBuilder setEmployee(Employee employee) {
-			this.employee = employee;
-			return this;
-		}
-		
-		public EmployeeBuilder setEmployees(List<Employee> employees) {
-			this.employees = employees;
-			return this;
-		}
-		
-		public EmployeeBuilder setCustomers(List<Customer> customers) {
-			this.customers = customers;
 			return this;
 		}
 		
@@ -195,12 +144,8 @@ public class Employee {
 			employee.firstName = this.firstName;
 			employee.extension = this.extension;
 			employee.email = this.email;
-			employee.office = this.office;
-			//employee.reportsTo = this.reportsTo;
-			employee.jobTitle = this.jobTitle;
-			employee.employee = this.employee;
-			employee.employees = this.employees;
-			employee.customers = this.customers;
+			employee.officeCode = this.officeCode;
+			employee.reportsTo = this.reportsTo;
 			return employee;
 		}
 		

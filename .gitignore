@@ -1,2 +1,3 @@
 hibernate.cfg.xml
 build/*
+persistence.xml
