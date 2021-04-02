@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 @Entity (name="orders")
 public class Order {
 	
+	public Order() {}
+	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer orderNumber;
 	
@@ -24,17 +26,13 @@ public class Order {
 	private String status;
 	private String comments;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="customerNumber")
+	@ManyToOne(optional = false, cascade = CascadeType.ALL)
+	@JoinColumn(name="customerNumber", referencedColumnName = "customerNumber")
 	private Customer customer;
 	
-	@OneToOne(mappedBy = "order")
-	private OrderDetails orderDetails;
+//	@OneToOne(mappedBy = "order")
+//	private OrderDetails orderDetails;
 	
-	private Order() {
-		//private constructor so that the object cannot be instantiated
-	}
-
 	public Integer getOrderNumber() {
 		return orderNumber;
 	}
@@ -91,13 +89,13 @@ public class Order {
 		this.customer = customer;
 	}
 
-	public OrderDetails getOrderDetails() {
-		return orderDetails;
-	}
-
-	public void setOrderDetails(OrderDetails orderDetails) {
-		this.orderDetails = orderDetails;
-	}
+//	public OrderDetails getOrderDetails() {
+//		return orderDetails;
+//	}
+//
+//	public void setOrderDetails(OrderDetails orderDetails) {
+//		this.orderDetails = orderDetails;
+//	}
 
 	public static class OrderBuilder {
 		

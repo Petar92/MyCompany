@@ -1,14 +1,18 @@
 package com.petar.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity (name="customers")
 public class Customer {
 	
-	private Customer() {}
+	public Customer() {}
 
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer customerNumber;
@@ -23,7 +27,14 @@ public class Customer {
 	private String postalCode;
 	private String country;
 	private double creditLimit;	
-	private Integer salesRepEmployeeNumber;
+	//private Integer salesRepEmployeeNumber;
+	
+	@ManyToOne(optional = true, cascade = CascadeType.ALL)
+	@JoinColumn(name = "salesRepEmployeeNumber", referencedColumnName = "employeeNumber")
+	private Employee employee;
+	
+//	@OneToOne(mappedBy = "customer")
+//	private Payment payment;
 	
 	public Integer getCustomerNumber() {
 		return customerNumber;
@@ -121,12 +132,28 @@ public class Customer {
 		this.creditLimit = creditLimit;
 	}
 
-	public Integer getSalesRepEmployeeNumber() {
-		return salesRepEmployeeNumber;
+//	public Integer getSalesRepEmployeeNumber() {
+//		return salesRepEmployeeNumber;
+//	}
+//
+//	public void setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
+//		this.salesRepEmployeeNumber = salesRepEmployeeNumber;
+//	}
+	
+//	public Payment getPayment() {
+//		return payment;
+//	}
+//
+//	public void setPayment(Payment payment) {
+//		this.payment = payment;
+//	}
+
+	public Employee getEmployee() {
+		return employee;
 	}
 
-	public void setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
-		this.salesRepEmployeeNumber = salesRepEmployeeNumber;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 	public static class CustomerBuilder {
@@ -142,7 +169,9 @@ public class Customer {
 		private String postalCode;
 		private String country;
 		private double creditLimit;
-		private Integer salesRepEmployeeNumber;
+		//private Integer salesRepEmployeeNumber;
+		private Employee employee;
+		private Payment payment;
 		
 		public CustomerBuilder() {
 		}
@@ -207,8 +236,18 @@ public class Customer {
 			return this;
 		}
 		
-		public CustomerBuilder setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
-			this.salesRepEmployeeNumber = salesRepEmployeeNumber;
+//		public CustomerBuilder setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
+//			this.salesRepEmployeeNumber = salesRepEmployeeNumber;
+//			return this;
+//		}
+		
+		public CustomerBuilder setEmployee(Employee employee) {
+			this.employee = employee;
+			return this;
+		}
+		
+		public CustomerBuilder setPayment(Payment payment) {
+			this.payment = payment;
 			return this;
 		}
 		
@@ -226,7 +265,9 @@ public class Customer {
 			customer.postalCode = this.postalCode;
 			customer.country = this.country;
 			customer.creditLimit = this.creditLimit;
-			customer.salesRepEmployeeNumber = this.salesRepEmployeeNumber;
+//			customer.salesRepEmployeeNumber = this.salesRepEmployeeNumber;
+			customer.employee = this.employee;
+//			customer.payment = this.payment;
 			
 			return customer;
 		}

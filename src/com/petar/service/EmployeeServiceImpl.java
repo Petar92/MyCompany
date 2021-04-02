@@ -4,81 +4,66 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.jws.WebService;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
+import com.petar.model.Customer;
 import com.petar.model.Employee;
 
 @WebService(endpointInterface="com.petar.service.EmployeeService", portName="EmployeePort", serviceName="EmployeeService")
 public class EmployeeServiceImpl implements EmployeeService {
 	
-	SessionFactory sessionFactory = null;
+	private EntityManagerFactory entityManagerFactory = null;
 	
-	public EmployeeServiceImpl(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public EmployeeServiceImpl(EntityManagerFactory entityManagerFactory) {
+		this.entityManagerFactory = entityManagerFactory;
 	}
 	
-//	public void init() {
-//		sessionFactory = new Configuration().configure().buildSessionFactory();
-//	}
-
 	@Override
 	public boolean addEmployee(Employee employee) {
-		
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.save(employee);
-		session.getTransaction().commit();
-		session.close();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		System.out.println("Created entity manager...");
+		entityManager.getTransaction().begin();
+		System.out.println("Transaction started...");
+		entityManager.persist(employee);
+		System.out.println(employee.getFirstName() + " persisted...");
+		entityManager.getTransaction().commit();
+		System.out.println("Transaction started...");
+		entityManager.clear();
+		System.out.println("Cleard entity manager...");
+		entityManager.close();
+		System.out.println("Closed entity manager...");
 		return true;
 	}
 
 	@Override
 	public boolean deleteEmployee(Integer id) {
-		boolean result = false;
-//		try {
-//			sessionFactory = new Configuration().configure().buildSessionFactory();
-//		} catch (Throwable ex) {
-//			System.err.println("Initial SessionFactory creation failed. " + ex);
-//			ex.printStackTrace();
-//		}
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		Serializable id2 = id;
-		Object persistentInstance = session.load(Employee.class, id2);
-		if (persistentInstance != null) {
-		    session.delete(persistentInstance);
-		    result = true;
-		}
-		session.getTransaction().commit();
-		session.close();
-		return result;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
 	public Employee getEmployee(int id) {
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		Employee employee = new Employee.EmployeeBuilder(id).build();
-		employee = (Employee) session.get(Employee.class, id);		
-		session.getTransaction().commit();
-		session.close();
-		System.out.println("customer: " + employee.getFirstName());
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		Employee employee = new Employee.EmployeeBuilder().build();
+		employee = entityManager.find(Employee.class, id);
+		entityManager.getTransaction().commit();
+		entityManager.clear();
+		entityManager.close();
 		return employee;
 	}
 
 	@Override
 	public List<Employee> getAllEmployees() {
-		Session session = sessionFactory.openSession();
-		session.beginTransaction();		
-		Query<Employee> query = session.createQuery("from com.petar.model.Employee");
-		List<Employee> customers = query.list();
-		session.getTransaction().commit();
-		session.close();
-		return customers;
+		// TODO Auto-generated method stub
+		return null;
 	}
+
 
 }

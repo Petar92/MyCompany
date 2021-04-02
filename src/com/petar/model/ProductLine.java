@@ -13,9 +13,7 @@ import javax.persistence.OneToMany;
 @Entity (name="productlines")
 public class ProductLine {
 	
-	private ProductLine() {
-		//private constructor so that the object cannot be instantiated
-	}
+	public ProductLine() {}
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String productLine;

@@ -2,58 +2,32 @@ package com.petar.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
+import javax.persistence.IdClass;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity (name="orderdetails")
+@IdClass(OrderDetailsId.class)
 public class OrderDetails implements Serializable{
 	
-	@Id //@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer orderNumber;
+	public OrderDetails() {}
 	
-	@Id //@GeneratedValue(strategy = GenerationType.AUTO)
-	private String productCode;
-	
-	private Integer quantityOrdered;
-	private double priceEach;
-	private Integer orderLineNumber;
-	
-	@OneToOne
-	@JoinColumn(name = "orderNumber")
-	@MapsId
+	@Id
+	@OneToOne(optional = false)
+	//@PrimaryKeyJoinColumn(name = "orderNumber", referencedColumnName="orderNumber")
 	private Order order;
 	
-	@OneToOne
-	@JoinColumn(name = "productCode")
-	@MapsId
+	@Id
+	@OneToOne(optional = false)
+	//@PrimaryKeyJoinColumn(name = "productCode", referencedColumnName="productCode")
 	private Product product;
 	
-	private OrderDetails() {
-		//private constructor so that the object cannot be instantiated
-	}
+	private Integer quantityOrdered;
+	private Integer orderLineNumber;
+	private double priceEach;
 	
-	public Integer getOrderNumber() {
-		return orderNumber;
-	}
-
-	public void setOrderNumber(Integer orderNumber) {
-		this.orderNumber = orderNumber;
-	}
-
-	public String getProductCode() {
-		return productCode;
-	}
-
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
-	}
-
 	public Integer getQuantityOrdered() {
 		return quantityOrdered;
 	}
@@ -147,8 +121,6 @@ public class OrderDetails implements Serializable{
 		
 		public OrderDetails build() {
 			OrderDetails orderDetails = new OrderDetails();
-			orderDetails.orderNumber = this.orderNumber;
-			orderDetails.productCode = this.productCode;
 			orderDetails.quantityOrdered = this.quantityOrdered;
 			orderDetails.priceEach = this.priceEach;
 			orderDetails.orderLineNumber = this.orderLineNumber;

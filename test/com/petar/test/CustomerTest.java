@@ -43,8 +43,7 @@ public class CustomerTest {
     	Mockito.when(customer.getState()).thenReturn(null);
     	Mockito.when(customer.getPostalCode()).thenReturn("44000");
     	Mockito.when(customer.getCountry()).thenReturn("France");
-    	Mockito.when(customer.getCreditLimit()).thenReturn(21000.00);
-    	Mockito.when(customer.getSalesRepEmployeeNumber()).thenReturn(1370); 	
+    	Mockito.when(customer.getCreditLimit()).thenReturn(21000.00); 	
 
     }
     
@@ -69,7 +68,7 @@ public class CustomerTest {
         assertEquals(customer.getPostalCode(), service.getCustomer(103).getPostalCode());
         assertEquals(customer.getCountry(), service.getCustomer(103).getCountry());
         assertEquals(customer.getCreditLimit(), service.getCustomer(103).getCreditLimit(), 0.00);
-        assertEquals(customer.getSalesRepEmployeeNumber(), service.getCustomer(103).getSalesRepEmployeeNumber());
+        //assertEquals(customer.getSalesRepEmployeeNumber(), service.getCustomer(103).getSalesRepEmployeeNumber());
     }
     
     @Test
@@ -86,7 +85,6 @@ public class CustomerTest {
 			    										   .setPostalCode("11000")
 			    										   .setCountry("Srbija")
 			    										   .setCreditLimit(221000.00)
-			    										   .setSalesRepEmployeeNumber(1370)
 			    										   .build();
     	customerId = addedCustomer.getCustomerNumber();
     	System.out.println("CUSTOMER ID " + customerId);
@@ -97,7 +95,7 @@ public class CustomerTest {
     @Order(3)
     public void testDeleteCustomer() throws Exception {
     	System.out.println("CUSTOMER ID " + customerId);
-    	Customer deletedCustomer = service.getCustomer(42);
+    	Customer deletedCustomer = service.getCustomer(12);
     	assertEquals(true, service.deleteCustomer(deletedCustomer));
     }
     

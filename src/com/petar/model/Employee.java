@@ -1,8 +1,5 @@
 package com.petar.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,10 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity(name="employees")
 public class Employee {
+	
+	public Employee() {}
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer employeeNumber;
@@ -21,7 +19,7 @@ public class Employee {
 	private String firstName;
 	private String extension;
 	private String email;
-	private Integer reportsTo;
+	//private Integer reportsTo;
 	private String jobTitle;
 	//private String officeCode;
 	
@@ -29,10 +27,10 @@ public class Employee {
 	@JoinColumn(name = "officeCode", referencedColumnName = "officeCode")
 	private Office office;
 	
-	private Employee() {
-		//private constructor so that the object cannot be instantiated
-	}
-	
+	@ManyToOne(optional = true, cascade = CascadeType.ALL)
+	@JoinColumn(name = "reportsTo", referencedColumnName = "employeeNumber")
+	private Employee employee;
+		
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
 	}
@@ -81,13 +79,13 @@ public class Employee {
 		this.jobTitle = jobTitle;
 	}
 
-	public Integer getReportsTo() {
-		return reportsTo;
-	}
-
-	public void setReportsTo(Integer reportsTo) {
-		this.reportsTo = reportsTo;
-	}
+//	public Integer getReportsTo() {
+//		return reportsTo;
+//	}
+//
+//	public void setReportsTo(Integer reportsTo) {
+//		this.reportsTo = reportsTo;
+//	}
 
 	public Office getOffice() {
 		return office;
@@ -95,6 +93,14 @@ public class Employee {
 
 	public void setOffice(Office office) {
 		this.office = office;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 
@@ -106,12 +112,11 @@ public class Employee {
 		private String extension;
 		private String email;		
 		private Office office;
-		private Integer reportsTo;
+		//private Integer reportsTo;
 		private String jobTitle;
+		private Employee employee;
 		
-		public EmployeeBuilder(Integer employeeNumber) {
-			this.employeeNumber = employeeNumber;
-		}
+		public EmployeeBuilder() {}
 		
 		public EmployeeBuilder setEmployeeNumber(Integer employeeNumber) {
 			this.employeeNumber = employeeNumber;
@@ -133,16 +138,20 @@ public class Employee {
 			this.email = email;
 			return this;
 		}
-		public EmployeeBuilder setReportsTo(Integer reportsTo) {
-			this.reportsTo = reportsTo;
-			return this;
-		}
+//		public EmployeeBuilder setReportsTo(Integer reportsTo) {
+//			this.reportsTo = reportsTo;
+//			return this;
+//		}
 		public EmployeeBuilder setJobTitle(String jobTitle) {
 			this.jobTitle = jobTitle;
 			return this;
 		}
 		public EmployeeBuilder setOffice(Office office) {
 			this.office = office;
+			return this;
+		}
+		public EmployeeBuilder setEmployee(Employee employee) {
+			this.employee = employee;
 			return this;
 		}
 		
@@ -154,7 +163,9 @@ public class Employee {
 			employee.extension = this.extension;
 			employee.email = this.email;
 			employee.office = this.office;
-			employee.reportsTo = this.reportsTo;
+			employee.jobTitle = this.jobTitle;
+//			employee.reportsTo = this.reportsTo;
+			employee.employee = this.employee;
 			return employee;
 		}
 		

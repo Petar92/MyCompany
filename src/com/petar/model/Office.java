@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 @Entity (name="offices")
 public class Office {
 	
+	public Office() {}
+	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String officeCode;
 	private String city;
@@ -24,9 +26,8 @@ public class Office {
 	private String postalCode;
 	private String territory;
 	
-	private Office() {
-		//private constructor so that the object cannot be instantiated
-	}
+	@OneToMany(mappedBy = "office", cascade=CascadeType.ALL)
+	private List<Employee> employees = new ArrayList<Employee>();
 	
 	public String getOfficeCode() {
 		return officeCode;
@@ -82,6 +83,29 @@ public class Office {
 	public void setTerritory(String territory) {
 		this.territory = territory;
 	}
+
+	public List<Employee> getEmployees() {
+		return new ArrayList<Employee>(employees);
+	}
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+	public void addEmployee(Employee employee) {
+		  if (employees.contains(employee)) {
+			  System.out.println("Office already contains employee " + employee.getFirstName() + "\nreturning...");
+			  return;  
+		  }
+		  System.out.println("Adding employee " + employee.getFirstName());
+		  employees.add(employee);
+		  employee.setOffice(this);
+	}
+	public void removeEmployee(Employee employee) {
+		  if (!employees.contains(employee))
+		    return ;
+		  employees.remove(employee);
+		  employee.setOffice(null);
+		}
+
 
 	public static class OfficeBuilder {
 		

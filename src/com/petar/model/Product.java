@@ -13,9 +13,7 @@ import javax.persistence.OneToOne;
 @Entity (name="products")
 public class Product {
 	
-	private Product() {
-		//private constructor so that the object cannot be instantiated
-	}
+	public Product() {}
 	
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String productCode; 
@@ -28,11 +26,11 @@ public class Product {
 	private double buyPrice;
 	private double msrp;
 	
-	@OneToOne(mappedBy = "product")
-	private OrderDetails orderDetails;
+//	@OneToOne(mappedBy = "product")
+//	private OrderDetails orderDetails;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="productLine")
+	@ManyToOne(optional = false, cascade = CascadeType.ALL)
+	@JoinColumn(name = "productLine", referencedColumnName = "productLine")
 	private ProductLine productLine;
 	
 	public String getProductCode() {
@@ -99,13 +97,13 @@ public class Product {
 		this.msrp = msrp;
 	}
 
-	public OrderDetails getOrderDetails() {
-		return orderDetails;
-	}
-
-	public void setOrderDetails(OrderDetails orderDetails) {
-		this.orderDetails = orderDetails;
-	}
+//	public OrderDetails getOrderDetails() {
+//		return orderDetails;
+//	}
+//
+//	public void setOrderDetails(OrderDetails orderDetails) {
+//		this.orderDetails = orderDetails;
+//	}
 
 	public ProductLine getProductLine() {
 		return productLine;
@@ -193,7 +191,7 @@ public class Product {
 			product.buyPrice = this.buyPrice;
 			product.msrp = this.msrp;
 			product.productLine = this.productLine;
-			product.orderDetails = this.orderDetails;
+//			product.orderDetails = this.orderDetails;
 			
 			return product;
 		}
