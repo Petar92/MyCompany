@@ -25,9 +25,7 @@ public class Employee {
 	private String firstName;
 	private String extension;
 	private String email;
-	//private Integer reportsTo;
 	private String jobTitle;
-	//private String officeCode;
 	
 	private Office office;
 	
@@ -165,7 +163,6 @@ public class Employee {
 		private Office office;
 		private Employee reportsTo;
 		private String jobTitle;
-		//private Employee employee;
 		
 		public EmployeeBuilder() {}
 		
@@ -201,10 +198,6 @@ public class Employee {
 			this.office = office;
 			return this;
 		}
-//		public EmployeeBuilder setEmployee(Employee employee) {
-//			this.employee = employee;
-//			return this;
-//		}
 		
 		public Employee build() {
 			Employee employee = new Employee();
@@ -216,7 +209,6 @@ public class Employee {
 			employee.office = this.office;
 			employee.jobTitle = this.jobTitle;
 			employee.employee = this.reportsTo;
-			//employee.employee = this.employee;
 			return employee;
 		}
 		
