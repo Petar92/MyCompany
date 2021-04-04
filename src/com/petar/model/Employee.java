@@ -1,5 +1,10 @@
 package com.petar.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,13 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity(name="employees")
+@Access(AccessType.PROPERTY)
 public class Employee {
 	
 	public Employee() {}
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer employeeNumber;
 	private String lastName;
 	private String firstName;
@@ -23,18 +29,88 @@ public class Employee {
 	private String jobTitle;
 	//private String officeCode;
 	
-	@ManyToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name = "officeCode", referencedColumnName = "officeCode")
 	private Office office;
 	
-	@ManyToOne(optional = true, cascade = CascadeType.ALL)
-	@JoinColumn(name = "reportsTo", referencedColumnName = "employeeNumber")
 	private Employee employee;
+	
+	private List<Employee> employees = new ArrayList<Employee>();
 		
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
 	}
 
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "officeCode", referencedColumnName = "officeCode")
+	public Office getOffice() {
+		return office;
+	}
+
+	public void setOffice(Office office) {
+		if (sameAsFormerOffice(office)) {
+			return;
+		}
+		Office oldOffice = this.office;
+		this.office = office;
+		if (oldOffice != null) {
+			oldOffice.removeEmployee(this);
+		}
+		if (office != null) {
+			office.addEmployee(this);
+		}
+	}
+	
+	@OneToMany(mappedBy = "employee", cascade=CascadeType.ALL)
+	public List<Employee> getEmployees() {
+		return new ArrayList<Employee>(employees);
+	}
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+	public void addEmployee(Employee employee) {
+		if (employees.contains(employee)) {
+			System.out.println("Office already contains employee " + employee.getFirstName() + "\nreturning...");
+			return;  
+		}
+		System.out.println("Adding employee " + employee.getFirstName());
+		employees.add(employee);
+		employee.setEmployee(this);
+	}
+	public void removeEmployee(Employee employee) {
+		  if (!employees.contains(employee))
+		    return ;
+		  employees.remove(employee);
+		  employee.setEmployee(null);
+	}
+
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "reportsTo", referencedColumnName = "employeeNumber")
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		if (sameAsFormerEmployee(employee)) {
+			return;
+		}
+		Employee oldEmployee = this.employee;
+		this.employee = employee;
+		if (oldEmployee != null) {
+			oldEmployee.removeEmployee(this);
+		}
+		if (employee != null) {
+			employee.addEmployee(this);
+		}
+	}
+	
+	private boolean sameAsFormerOffice(Office newOffice) {
+		return office==null? newOffice == null : office.equals(newOffice);
+	}
+	
+	private boolean sameAsFormerEmployee(Employee newEmployee) {
+		return employee==null ? newEmployee == null : employee.equals(newEmployee);
+	}
+	
 	public void setEmployeeNumber(Integer employeeNumber) {
 		this.employeeNumber = employeeNumber;
 	}
@@ -79,31 +155,6 @@ public class Employee {
 		this.jobTitle = jobTitle;
 	}
 
-//	public Integer getReportsTo() {
-//		return reportsTo;
-//	}
-//
-//	public void setReportsTo(Integer reportsTo) {
-//		this.reportsTo = reportsTo;
-//	}
-
-	public Office getOffice() {
-		return office;
-	}
-
-	public void setOffice(Office office) {
-		this.office = office;
-	}
-
-	public Employee getEmployee() {
-		return employee;
-	}
-
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
-
-
 	public static class EmployeeBuilder {
 		
 		private Integer employeeNumber;
@@ -112,9 +163,9 @@ public class Employee {
 		private String extension;
 		private String email;		
 		private Office office;
-		//private Integer reportsTo;
+		private Employee reportsTo;
 		private String jobTitle;
-		private Employee employee;
+		//private Employee employee;
 		
 		public EmployeeBuilder() {}
 		
@@ -138,10 +189,10 @@ public class Employee {
 			this.email = email;
 			return this;
 		}
-//		public EmployeeBuilder setReportsTo(Integer reportsTo) {
-//			this.reportsTo = reportsTo;
-//			return this;
-//		}
+		public EmployeeBuilder setReportsTo(Employee reportsTo) {
+			this.reportsTo = reportsTo;
+			return this;
+		}
 		public EmployeeBuilder setJobTitle(String jobTitle) {
 			this.jobTitle = jobTitle;
 			return this;
@@ -150,10 +201,10 @@ public class Employee {
 			this.office = office;
 			return this;
 		}
-		public EmployeeBuilder setEmployee(Employee employee) {
-			this.employee = employee;
-			return this;
-		}
+//		public EmployeeBuilder setEmployee(Employee employee) {
+//			this.employee = employee;
+//			return this;
+//		}
 		
 		public Employee build() {
 			Employee employee = new Employee();
@@ -164,8 +215,8 @@ public class Employee {
 			employee.email = this.email;
 			employee.office = this.office;
 			employee.jobTitle = this.jobTitle;
-//			employee.reportsTo = this.reportsTo;
-			employee.employee = this.employee;
+			employee.employee = this.reportsTo;
+			//employee.employee = this.employee;
 			return employee;
 		}
 		
