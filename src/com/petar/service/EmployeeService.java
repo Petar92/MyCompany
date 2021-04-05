@@ -14,7 +14,7 @@ public interface EmployeeService {
 	public boolean addEmployee(Employee employee);
 	
 	@WebMethod
-	public boolean deleteEmployee(Integer id);
+	public boolean deleteEmployee(Employee employee);
 	
 	@WebMethod
 	public Employee getEmployee(int id);

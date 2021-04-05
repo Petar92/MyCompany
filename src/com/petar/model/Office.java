@@ -3,6 +3,8 @@ package com.petar.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,11 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity (name="offices")
+@Access(AccessType.PROPERTY)
 public class Office {
 	
 	public Office() {}
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String officeCode;
 	private String city;
 	private String phone;
@@ -26,9 +28,9 @@ public class Office {
 	private String postalCode;
 	private String territory;
 	
-	@OneToMany(mappedBy = "office", cascade=CascadeType.ALL)
 	private List<Employee> employees = new ArrayList<Employee>();
 	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public String getOfficeCode() {
 		return officeCode;
 	}
@@ -84,6 +86,7 @@ public class Office {
 		this.territory = territory;
 	}
 
+	@OneToMany(mappedBy = "office", cascade=CascadeType.REMOVE)
 	public List<Employee> getEmployees() {
 		return new ArrayList<Employee>(employees);
 	}
@@ -91,20 +94,20 @@ public class Office {
 		this.employees = employees;
 	}
 	public void addEmployee(Employee employee) {
-		  if (employees.contains(employee)) {
-			  System.out.println("Office already contains employee " + employee.getFirstName() + "\nreturning...");
-			  return;  
-		  }
-		  System.out.println("Adding employee " + employee.getFirstName());
-		  employees.add(employee);
-		  employee.setOffice(this);
+		if (employees.contains(employee)) {
+			System.out.println("Office already contains employee " + employee.getFirstName() + "\nreturning...");
+			return;  
+		}
+		System.out.println("Adding employee " + employee.getFirstName());
+		employees.add(employee);
+		employee.setOffice(this);
 	}
 	public void removeEmployee(Employee employee) {
 		  if (!employees.contains(employee))
 		    return ;
 		  employees.remove(employee);
 		  employee.setOffice(null);
-		}
+	}
 
 
 	public static class OfficeBuilder {

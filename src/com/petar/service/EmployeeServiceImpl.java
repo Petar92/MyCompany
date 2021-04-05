@@ -1,18 +1,16 @@
 package com.petar.service;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
-
-import com.petar.model.Customer;
 import com.petar.model.Employee;
 
 @WebService(endpointInterface="com.petar.service.EmployeeService", portName="EmployeePort", serviceName="EmployeeService")
@@ -27,24 +25,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public boolean addEmployee(Employee employee) {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		System.out.println("Created entity manager...");
 		entityManager.getTransaction().begin();
-		System.out.println("Transaction started...");
 		entityManager.persist(employee);
-		System.out.println(employee.getFirstName() + " persisted...");
 		entityManager.getTransaction().commit();
-		System.out.println("Transaction started...");
 		entityManager.clear();
-		System.out.println("Cleard entity manager...");
 		entityManager.close();
-		System.out.println("Closed entity manager...");
 		return true;
 	}
 
 	@Override
-	public boolean deleteEmployee(Integer id) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteEmployee(Employee employee) {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		Employee emp = entityManager.find(Employee.class, employee.getEmployeeNumber());
+		entityManager.remove(emp);
+		entityManager.getTransaction().commit();
+		entityManager.clear();
+		entityManager.close();
+		return true;
 	}
 
 	@Override
@@ -61,8 +59,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> getAllEmployees() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Employee> employees = new ArrayList<Employee>();
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();;
+		try {
+			CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+			CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
+			Root<Employee> rootEntry = cq.from(Employee.class);
+			CriteriaQuery<Employee> all = cq.select(rootEntry);
+			TypedQuery<Employee> allQuery = entityManager.createQuery(all);
+			employees =  allQuery.getResultList();
+			entityManager.getTransaction().commit();
+		} catch(Exception e) {
+			System.out.println("EXCEPTION CAUGHT " + e.getClass().toString() + "\nSTACK TRACE: ");
+			e.printStackTrace();
+			return null;
+		} finally {
+			entityManager.clear();
+			entityManager.close();
+		}
+		return employees;
 	}
 
 
