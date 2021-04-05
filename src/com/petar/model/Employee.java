@@ -32,6 +32,8 @@ public class Employee {
 	private Employee employee;
 	
 	private List<Employee> employees = new ArrayList<Employee>();
+	
+	private List<Customer> customers = new ArrayList<Customer>();
 		
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getEmployeeNumber() {
@@ -99,6 +101,29 @@ public class Employee {
 		if (employee != null) {
 			employee.addEmployee(this);
 		}
+	}
+	
+	@OneToMany(mappedBy = "employee", cascade= CascadeType.REMOVE)
+	public List<Customer> getCustomer() {
+		return new ArrayList<Customer>(customers);
+	}
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
+	}
+	public void addCustomer(Customer customer) {
+		if (customers.contains(customer)) {
+			System.out.println("Employee already has customer " + customer.getCustomerName() + "\nreturning...");
+			return;  
+		}
+		System.out.println("Adding customer " + customer.getCustomerName());
+		customers.add(customer);
+		customer.setEmployee(this);
+	}
+	public void removeCustomer(Customer customer) {
+		  if (!customers.contains(customer))
+		    return ;
+		  customers.remove(customer);
+		  customer.setEmployee(null);
 	}
 	
 	private boolean sameAsFormerOffice(Office newOffice) {

@@ -2,6 +2,7 @@ package com.petar.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -15,13 +16,13 @@ public class OrderDetails implements Serializable{
 	public OrderDetails() {}
 	
 	@Id
-	@OneToOne(optional = false)
-	//@PrimaryKeyJoinColumn(name = "orderNumber", referencedColumnName="orderNumber")
+	@OneToOne(optional = false, cascade = CascadeType.PERSIST)
+	@PrimaryKeyJoinColumn(name = "orderNumber", referencedColumnName="orderNumber")
 	private Order order;
 	
 	@Id
 	@OneToOne(optional = false)
-	//@PrimaryKeyJoinColumn(name = "productCode", referencedColumnName="productCode")
+	@PrimaryKeyJoinColumn(name = "productCode", referencedColumnName="productCode")
 	private Product product;
 	
 	private Integer quantityOrdered;
@@ -70,29 +71,11 @@ public class OrderDetails implements Serializable{
 
 	public static class OrderDetailBuilder {
 		
-		private Integer orderNumber;
-		private String productCode;
 		private Integer quantityOrdered;
 		private double priceEach;
 		private Integer orderLineNumber;
 		private Order order;
 		private Product product;
-		
-		public OrderDetailBuilder(Integer orderNumber) {
-			this.orderNumber = orderNumber;
-		}
-
-		public OrderDetailBuilder setOrderNumber(Integer orderNumber) {
-			System.out.println("SETTING ORDER NUMBER TO " + orderNumber);
-			this.orderNumber = orderNumber;
-			return this;
-		}
-
-		public OrderDetailBuilder setProductCode(String productCode) {
-			System.out.println("SETTING PRODUCT CODE TO " + productCode);
-			this.productCode = productCode;
-			return this;
-		}
 
 		public OrderDetailBuilder setQuantityOrdered(Integer quantityOrdered) {
 			this.quantityOrdered = quantityOrdered;

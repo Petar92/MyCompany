@@ -1,5 +1,7 @@
 package com.petar.model;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,13 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity (name="products")
+@Access(AccessType.PROPERTY)
 public class Product {
 	
 	public Product() {}
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private String productCode; 
-	
 	private String productName;
 	private String productScale;
 	private String productVendor;
@@ -25,14 +26,10 @@ public class Product {
 	private Integer quantityInStock;
 	private double buyPrice;
 	private double msrp;
-	
-//	@OneToOne(mappedBy = "product")
-//	private OrderDetails orderDetails;
-	
-	@ManyToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name = "productLine", referencedColumnName = "productLine")
+	private OrderDetails orderDetails;
 	private ProductLine productLine;
 	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public String getProductCode() {
 		return productCode;
 	}
@@ -40,6 +37,47 @@ public class Product {
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
 	}
+	
+	/////////////////////////RELATION TO ORDERDETAILS START///////////////////
+	
+	@OneToOne(cascade = CascadeType.PERSIST)
+	public OrderDetails getOrderDetails() {
+		return orderDetails;
+	}
+	
+	public void setOrderDetails(OrderDetails orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+	
+	/////////////////////////RELATION TO ORDERDETAILS END/////////////////////
+	
+	////////////////////////RELATION TO PRODUCTLINES START////////////////////
+	
+	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "productLine", referencedColumnName = "productLine")
+	public ProductLine getProductLine() {
+		return productLine;
+	}
+
+	public void setProductLine(ProductLine productLine) {
+		if (sameAsFormerProductLine(productLine)) {
+			return;
+		}
+		ProductLine oldProductLine = this.productLine;
+		this.productLine = productLine;
+		if (oldProductLine != null) {
+			oldProductLine.removeProduct(this);
+		}
+		if (productLine != null) {
+			productLine.addProduct(this);
+		}
+	}
+	
+	private boolean sameAsFormerProductLine(ProductLine newProductLine) {
+		return productLine==null ? newProductLine == null : productLine.equals(newProductLine);
+	}
+	
+	////////////////////////RELATION TO PRODUCTLINES START////////////////////
 
 	public String getProductName() {
 		return productName;
@@ -97,26 +135,10 @@ public class Product {
 		this.msrp = msrp;
 	}
 
-//	public OrderDetails getOrderDetails() {
-//		return orderDetails;
-//	}
-//
-//	public void setOrderDetails(OrderDetails orderDetails) {
-//		this.orderDetails = orderDetails;
-//	}
-
-	public ProductLine getProductLine() {
-		return productLine;
-	}
-
-	public void setProductLine(ProductLine productLine) {
-		this.productLine = productLine;
-	}
-
 	public static class ProductBuilder {
 		
-		private String productCode; 
 		private String productName;
+		private ProductLine productLine;
 		private String productScale;
 		private String productVendor;
 		private String productDescription;
@@ -124,19 +146,16 @@ public class Product {
 		private double buyPrice;
 		private double msrp;
 		private OrderDetails orderDetails;
-		private ProductLine productLine;
 		
-		public ProductBuilder(String productCode) {
-			this.productCode = productCode;
-		}
-
-		public ProductBuilder setProductCode(String productCode) {
-			this.productCode = productCode;
-			return this;
-		}
+		public ProductBuilder() {}
 
 		public ProductBuilder setProductName(String productName) {
 			this.productName = productName;
+			return this;
+		}
+		
+		public ProductBuilder setProductLine(ProductLine productLine) {
+			this.productLine = productLine;
 			return this;
 		}
 
@@ -175,23 +194,17 @@ public class Product {
 			return this;
 		}
 		
-		public ProductBuilder setProductLine(ProductLine productLine) {
-			this.productLine = productLine;
-			return this;
-		}
-		
 		public Product build() {
 			Product product = new Product();
-			product.productCode = this.productCode;
 			product.productName = this.productName;
+			product.productLine = this.productLine;
 			product.productScale = this.productScale;
 			product.productVendor = this.productVendor;
 			product.productDescription = this.productDescription;
 			product.quantityInStock = this.quantityInStock;
 			product.buyPrice = this.buyPrice;
 			product.msrp = this.msrp;
-			product.productLine = this.productLine;
-//			product.orderDetails = this.orderDetails;
+			product.orderDetails = this.orderDetails;
 			
 			return product;
 		}

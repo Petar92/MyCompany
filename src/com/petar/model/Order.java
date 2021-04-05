@@ -2,37 +2,35 @@ package com.petar.model;
 
 import java.sql.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity (name="orders")
+@Access(AccessType.PROPERTY)
 public class Order {
 	
 	public Order() {}
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer orderNumber;
 	
+	private Integer orderNumber;
 	private Date orderDate;
 	private Date requiredDate;
 	private Date shippedDate;
 	private String status;
 	private String comments;
-	
-	@ManyToOne(optional = false, cascade = CascadeType.ALL)
-	@JoinColumn(name="customerNumber", referencedColumnName = "customerNumber")
 	private Customer customer;
+	private OrderDetails orderDetails;
 	
-//	@OneToOne(mappedBy = "order")
-//	private OrderDetails orderDetails;
-	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getOrderNumber() {
 		return orderNumber;
 	}
@@ -40,6 +38,48 @@ public class Order {
 	public void setOrderNumber(Integer orderNumber) {
 		this.orderNumber = orderNumber;
 	}
+	
+	//////////////////////RELATION TO CUSTOMERS START///////////////////
+	
+	@ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "customerNumber", referencedColumnName = "customerNumber")
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		if (sameAsFormerCustomer(customer)) {
+			return;
+		}
+		Customer oldCustomer = this.customer;
+		this.customer = customer;
+		if (oldCustomer != null) {
+			oldCustomer.removeOrder(this);
+		}
+		if (customer != null) {
+			customer.addOrder(this);
+		}
+	}
+	
+	private boolean sameAsFormerCustomer(Customer newCustomer) {
+		return customer==null ? newCustomer == null : customer.equals(newCustomer);
+	}
+	
+	//////////////////////RELATION TO CUSTOMERS END///////////////////
+	
+	//////////////////////RELATION TO ORDERDETAILS START///////////////////
+	
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+	@Column(name = "orderNumber")
+	public OrderDetails getOrderDetails() {
+		return orderDetails;
+	}
+	
+	public void setOrderDetails(OrderDetails orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+	
+	//////////////////////RELATION TO ORDERDETAILS END///////////////////
 
 	public Date getOrderDate() {
 		return orderDate;
@@ -80,23 +120,7 @@ public class Order {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-
-	public Customer getCustomer() {
-		return customer;
-	}
-
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
-	}
-
-//	public OrderDetails getOrderDetails() {
-//		return orderDetails;
-//	}
-//
-//	public void setOrderDetails(OrderDetails orderDetails) {
-//		this.orderDetails = orderDetails;
-//	}
-
+	
 	public static class OrderBuilder {
 		
 		private Integer orderNumber;
@@ -106,6 +130,7 @@ public class Order {
 		private String status;
 		private String comments;
 		private Customer customer;
+		public OrderDetails orderDetails;
 		
 		public OrderBuilder(Integer orderNumber) {
 			this.orderNumber = orderNumber;
@@ -147,6 +172,11 @@ public class Order {
 			return this;
 		}
 		
+		public OrderBuilder setOrderDetails(OrderDetails orderDetails) {
+			this.orderDetails = orderDetails;
+			return this;
+		}
+		
 		public Order build() {
 			Order order = new Order();
 			order.orderNumber = this.orderNumber;
@@ -156,6 +186,7 @@ public class Order {
 			order.status = this.status;
 			order.comments = this.comments;
 			order.customer = this.customer;
+			order.orderDetails = this.orderDetails;
 			
 			return order;
 		}
