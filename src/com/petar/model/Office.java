@@ -6,11 +6,14 @@ import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity (name="offices")
 @Access(AccessType.PROPERTY)
@@ -30,7 +33,9 @@ public class Office {
 	
 	private List<Employee> employees = new ArrayList<Employee>();
 	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id
+	@GenericGenerator(name = "string_id", strategy="com.petar.model.OfficeIdGenerator")
+	@GeneratedValue(generator = "string_id")
 	public String getOfficeCode() {
 		return officeCode;
 	}
@@ -112,7 +117,6 @@ public class Office {
 
 	public static class OfficeBuilder {
 		
-		private String officeCode;
 		private String city;
 		private String phone;
 		private String addressLine1;
@@ -122,14 +126,7 @@ public class Office {
 		private String postalCode;
 		private String territory;
 		
-		public OfficeBuilder(String officeCode) {
-			this.officeCode = officeCode;
-		}
-
-		public OfficeBuilder setOfficeCode(String officeCode) {
-			this.officeCode = officeCode;
-			return this;
-		}
+		public OfficeBuilder() {}
 
 		public OfficeBuilder setCity(String city) {
 			this.city = city;
@@ -173,7 +170,6 @@ public class Office {
 		
 		public Office build() {
 			Office office = new Office();
-			office.officeCode = this.officeCode;
 			office.city = this.city;
 			office.phone = this.phone;
 			office.addressLine1 = this.addressLine1;

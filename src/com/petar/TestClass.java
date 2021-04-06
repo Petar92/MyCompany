@@ -28,54 +28,59 @@ public class TestClass {
 		CustomerService service = new CustomerServiceImpl(entityManagerFactory);
 		EmployeeService empService = new EmployeeServiceImpl(entityManagerFactory);
 				
-//		Customer customer = new Customer.CustomerBuilder()
-//										.setAddressLine1("addres 1")
-//										.setAddressLine2("address 2")
-//										.setCity("Loznica")
-//										.setContacFirstName("Kontakt Ime")
-//										.setContactLastName("Kontakt prezime")
-//										.setCountry("Srbija")
-//										.setCreditLimit(123.23)
-//										.setName("kupac")
-//										.setPhone("123321")
-//										.setPostalCode("15300")
-//										.setState("Srbija")
-//										.build();
-//		Office office = new Office.OfficeBuilder("1").setCity("Beograd")
-//													   .setPhone("12343")
-//													   .setAddressLine1("add line 1")
-//													   .setCountry("Srbija")
-//													   .setPostalCode("11000")
-//													   .setTerritory("teritorija")
-//													   .build();
+		Customer customer = new Customer.CustomerBuilder()
+										.setAddressLine1("addres 1")
+										.setAddressLine2("address 2")
+										.setCity("Loznica")
+										.setContacFirstName("Kontakt Ime")
+										.setContactLastName("Kontakt prezime")
+										.setCountry("Srbija")
+										.setCreditLimit(123.23)
+										.setName("kupac")
+										.setPhone("123321")
+										.setPostalCode("15300")
+										.setState("Srbija")
+										.build();
+		
+		Office office = new Office.OfficeBuilder().setCity("Beograd")
+													   .setPhone("12343")
+													   .setAddressLine1("add line 1")
+													   .setCountry("Srbija")
+													   .setPostalCode("11000")
+													   .setTerritory("teritorija")
+													   .build();
 //		
-//		Employee bossEmployee = new Employee.EmployeeBuilder()
-//				  .setFirstName("Petar")
-//				  .setLastName("Petrovic")
-//				  .setEmail("petar@petar.com")
-//				  .setExtension("x55586")
-//				  .setOffice(office)
-//				  .setJobTitle("CapoDiTuttiCappi")
-//				  .build();
-//		
-//		
-//		System.out.println(bossEmployee.getFirstName() + " is the boss!");
-//		
-//		Employee subEmployee = new Employee.EmployeeBuilder()
-//				  .setReportsTo(bossEmployee)
-//				  .setFirstName("Stefan")
-//				  .setLastName("Petrovic")
-//				  .setEmail("stefan@petrovic.com")
-//				  .setExtension("x55586")
-//				  .setOffice(office)
-//				  .setJobTitle("Capo")
-//				  .build();
-//		System.out.println(subEmployee.getFirstName() + " is a capo!");		
-//
-//	
+		Employee bossEmployee = new Employee.EmployeeBuilder()
+				  .setFirstName("Petar")
+				  .setLastName("Petrovic")
+				  .setEmail("petar@petar.com")
+				  .setExtension("x55586")
+				  .setOffice(office)
+				  .setJobTitle("CapoDiTuttiCappi")
+				  .build();
+		
+		
+		System.out.println(bossEmployee.getFirstName() + " is the boss!");
+		
+		Employee subEmployee = new Employee.EmployeeBuilder()
+				  .setReportsTo(bossEmployee)
+				  .setFirstName("Stefan")
+				  .setLastName("Petrovic")
+				  .setEmail("stefan@petrovic.com")
+				  .setExtension("x55586")
+				  .setOffice(office)
+				  .setJobTitle("Capo")
+				  .build();
+		System.out.println(subEmployee.getFirstName() + " is a capo!");	
+		
+		
+		subEmployee.setOffice(office);
+//		subEmployee.addCustomer(customer);
+
+	
 //		Employee emp = empService.getEmployee(48);
-//		Employee boss = empService.getEmployee(49);
-//		
+//		Employee boss = empService.getEmployee(69);
+		
 //		empService.deleteEmployee(boss);
 //		
 //		office.addEmployee(bossEmployee);
@@ -87,7 +92,7 @@ public class TestClass {
 //		System.out.println(subEmployee.getFirstName() + "'s office number is " + subEmployee.getOffice().getOfficeCode());
 //		
 //		empService.addEmployee(bossEmployee);
-//		empService.addEmployee(subEmployee);
+		empService.addEmployee(subEmployee);
 		
 //		Employee employee = empService.getEmployee(1002);
 //		
@@ -104,17 +109,12 @@ public class TestClass {
 //			count++;
 //		}
 //		System.out.println("Total number of customers is " + count);
-//		
-//		
-//		//empService.getEmployee(1002);
-//		//empService.addEmployee(employee);
-//		
-		
-		employees = empService.getAllEmployees();
-		for (Employee employee : employees) {
-			System.out.println(employee.getFirstName());
-		}
-		System.out.println("Total of : " + employees.size() + " employees");
+
+//		employees = empService.getAllEmployees();
+//		for (Employee employee : employees) {
+//			System.out.println(employee.getFirstName());
+//		}
+//		System.out.println("Total of : " + employees.size() + " employees");
 	}
 
 }
