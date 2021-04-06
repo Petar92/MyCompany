@@ -3,26 +3,30 @@ package com.petar.model;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity (name="orderdetails")
-@IdClass(OrderDetailsId.class)
 public class OrderDetails implements Serializable{
 	
 	public OrderDetails() {}
 	
-	@Id
-	@OneToOne(optional = false, cascade = CascadeType.PERSIST)
-	@PrimaryKeyJoinColumn(name = "orderNumber", referencedColumnName="orderNumber")
+	@EmbeddedId OrderDetailsId id;
+	
+	@MapsId("orderNumber")
+	@JoinColumn(name = "orderNumber", referencedColumnName = "orderNumber")
+	@OneToOne
 	private Order order;
 	
-	@Id
-	@OneToOne(optional = false)
-	@PrimaryKeyJoinColumn(name = "productCode", referencedColumnName="productCode")
+	@MapsId("productCode")
+	@JoinColumn(name = "productCode", referencedColumnName = "productCode")
+	@OneToOne
 	private Product product;
 	
 	private Integer quantityOrdered;

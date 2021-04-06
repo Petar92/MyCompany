@@ -21,7 +21,6 @@ public class Customer {
 	
 	public Customer() {}
 
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer customerNumber;
 	private String customerName;
 	private String contactLastName;
@@ -40,6 +39,16 @@ public class Customer {
 	private List<Order> orders = new ArrayList<Order>();
 	
 	private Payment payment;
+	
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	public Integer getCustomerNumber() {
+		return customerNumber;
+	}
+
+	public void setCustomerNumber(Integer customerNumber) {
+		this.customerNumber = customerNumber;
+	}
+
 	
 	/////////////////////////////REALTION TO EMPLOYEES START////////////////////////////////////
 	
@@ -109,14 +118,6 @@ public class Customer {
 		
 	/////////////////////////////REALTION TO PAYMENT END////////////////////////////////////
 	
-	public Integer getCustomerNumber() {
-		return customerNumber;
-	}
-
-	public void setCustomerNumber(Integer customerNumber) {
-		this.customerNumber = customerNumber;
-	}
-
 	public String getCustomerName() {
 		return customerName;
 	}
@@ -218,9 +219,9 @@ public class Customer {
 		private String postalCode;
 		private String country;
 		private double creditLimit;
-		//private Integer salesRepEmployeeNumber;
 		private Employee employee;
-		private Order order;
+		private List<Order> orders;
+		private Payment payment;
 		
 		public CustomerBuilder() {
 		}
@@ -285,18 +286,18 @@ public class Customer {
 			return this;
 		}
 		
-//		public CustomerBuilder setSalesRepEmployeeNumber(Integer salesRepEmployeeNumber) {
-//			this.salesRepEmployeeNumber = salesRepEmployeeNumber;
-//			return this;
-//		}
-		
 		public CustomerBuilder setEmployee(Employee employee) {
 			this.employee = employee;
 			return this;
 		}
 		
-		public CustomerBuilder setPayment(Order order) {
-			this.order = order;
+		public CustomerBuilder setOrder(List<Order> orders) {
+			this.orders = orders;
+			return this;
+		}
+		
+		public CustomerBuilder setPayment(Payment payment) {
+			this.payment = payment;
 			return this;
 		}
 		
@@ -314,9 +315,9 @@ public class Customer {
 			customer.postalCode = this.postalCode;
 			customer.country = this.country;
 			customer.creditLimit = this.creditLimit;
-//			customer.salesRepEmployeeNumber = this.salesRepEmployeeNumber;
 			customer.employee = this.employee;
-//			customer.order = this.order;
+			customer.orders = this.orders;
+			customer.payment = this.payment;
 			
 			return customer;
 		}

@@ -112,7 +112,6 @@ public class Office {
 
 	public static class OfficeBuilder {
 		
-		private String officeCode;
 		private String city;
 		private String phone;
 		private String addressLine1;
@@ -122,14 +121,7 @@ public class Office {
 		private String postalCode;
 		private String territory;
 		
-		public OfficeBuilder(String officeCode) {
-			this.officeCode = officeCode;
-		}
-
-		public OfficeBuilder setOfficeCode(String officeCode) {
-			this.officeCode = officeCode;
-			return this;
-		}
+		public OfficeBuilder() {}
 
 		public OfficeBuilder setCity(String city) {
 			this.city = city;
@@ -173,7 +165,6 @@ public class Office {
 		
 		public Office build() {
 			Office office = new Office();
-			office.officeCode = this.officeCode;
 			office.city = this.city;
 			office.phone = this.phone;
 			office.addressLine1 = this.addressLine1;

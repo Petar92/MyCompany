@@ -6,29 +6,32 @@ import java.sql.Date;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity (name="payments")
-@IdClass(PaymentId.class)
 public class Payment implements Serializable{
 	
 	public Payment() {}
+		
+	@EmbeddedId
+	private PaymentId checkNumber;
 	
-	@Id
-	@OneToOne(optional = false, cascade = CascadeType.PERSIST)
-	private Customer customer;
-	
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private String checkNumber;
 	private Date paymentDate;
 	private double amount;
 	
+	@MapsId("customerNumber")
+	@JoinColumn(name = "customerNumber", referencedColumnName = "customerNumber")
+	@OneToOne(optional = false)
+	private Customer customer;
 	
 	public Customer getCustomer() {
 		return customer;
@@ -38,12 +41,12 @@ public class Payment implements Serializable{
 		this.customer = customer;
 	}
 	
-	public String getCheckNumber() {
-		return checkNumber;
-	}
-	public void setCheckNumber(String checkNumber) {
-		this.checkNumber = checkNumber;
-	}
+//	public String getCheckNumber() {
+//		return checkNumber;
+//	}
+//	public void setCheckNumber(String checkNumber) {
+//		this.checkNumber = checkNumber;
+//	}
 	public Date getPaymentDate() {
 		return paymentDate;
 	}

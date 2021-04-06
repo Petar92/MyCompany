@@ -2,16 +2,19 @@ package com.petar.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class PaymentId implements Serializable {
 	
-	private Integer customer;
+	private Integer customerNumber;
 	
 	private String checkNumber;
 	
 	public PaymentId() {}
 
-	public PaymentId(Integer customer, String checkNumber) {
-		this.customer = customer;
+	public PaymentId(Integer customerNumber, String checkNumber) {
+		this.customerNumber = customerNumber;
 		this.checkNumber = checkNumber;
 	}
 
@@ -20,7 +23,7 @@ public class PaymentId implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((checkNumber == null) ? 0 : checkNumber.hashCode());
-		result = prime * result + ((customer == null) ? 0 : customer.hashCode());
+		result = prime * result + ((customerNumber == null) ? 0 : customerNumber.hashCode());
 		return result;
 	}
 
@@ -38,10 +41,10 @@ public class PaymentId implements Serializable {
 				return false;
 		} else if (!checkNumber.equals(other.checkNumber))
 			return false;
-		if (customer == null) {
-			if (other.customer != null)
+		if (customerNumber == null) {
+			if (other.customerNumber != null)
 				return false;
-		} else if (!customer.equals(other.customer))
+		} else if (!customerNumber.equals(other.customerNumber))
 			return false;
 		return true;
 	}

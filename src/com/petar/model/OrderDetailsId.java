@@ -2,25 +2,27 @@ package com.petar.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+@Embeddable
 public class OrderDetailsId implements Serializable {
 	
-	private Integer order;
+	private Integer orderNumber;
 	
-	private String product;
+	private String productCode;
 
 	public OrderDetailsId() {}
 	
-	public OrderDetailsId(Integer order, String product) {
-		this.order = order;
-		this.product = product;
+	public OrderDetailsId(Integer orderNumber, String productCode) {
+		this.orderNumber = orderNumber;
+		this.productCode = productCode;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((order == null) ? 0 : order.hashCode());
-		result = prime * result + ((product == null) ? 0 : product.hashCode());
+		result = prime * result + ((orderNumber == null) ? 0 : orderNumber.hashCode());
+		result = prime * result + ((productCode == null) ? 0 : productCode.hashCode());
 		return result;
 	}
 
@@ -33,15 +35,15 @@ public class OrderDetailsId implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		OrderDetailsId other = (OrderDetailsId) obj;
-		if (order == null) {
-			if (other.order != null)
+		if (orderNumber == null) {
+			if (other.orderNumber != null)
 				return false;
-		} else if (!order.equals(other.order))
+		} else if (!orderNumber.equals(other.orderNumber))
 			return false;
-		if (product == null) {
-			if (other.product != null)
+		if (productCode == null) {
+			if (other.productCode != null)
 				return false;
-		} else if (!product.equals(other.product))
+		} else if (!productCode.equals(other.productCode))
 			return false;
 		return true;
 	}

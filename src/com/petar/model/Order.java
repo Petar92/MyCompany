@@ -70,7 +70,6 @@ public class Order {
 	//////////////////////RELATION TO ORDERDETAILS START///////////////////
 	
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-	@Column(name = "orderNumber")
 	public OrderDetails getOrderDetails() {
 		return orderDetails;
 	}

@@ -7,6 +7,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,7 +40,13 @@ public class Employee {
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
 	}
+	
+	public void setEmployeeNumber(Integer employeeNumber) {
+		this.employeeNumber = employeeNumber;
+	}
 
+	/////////////////////////////REALTION TO OFFICES START/////////////////////////////////////////////////
+	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "officeCode", referencedColumnName = "officeCode")
 	public Office getOffice() {
@@ -59,6 +66,14 @@ public class Employee {
 			office.addEmployee(this);
 		}
 	}
+	
+	private boolean sameAsFormerOffice(Office newOffice) {
+		return office==null? newOffice == null : office.equals(newOffice);
+	}
+	
+	/////////////////////////////REALTION TO OFFICES END/////////////////////////////////////////////////
+	
+	/////////////////////////////REALTION TO EMPLOYEES START (@OneToMany)////////////////////////////////////
 	
 	@OneToMany(mappedBy = "employee", cascade= CascadeType.REMOVE)
 	public List<Employee> getEmployees() {
@@ -82,6 +97,10 @@ public class Employee {
 		  employees.remove(employee);
 		  employee.setEmployee(null);
 	}
+	
+	/////////////////////////////REALTION TO EMPLOYEES END (@OneToMany)////////////////////////////////////
+	
+	/////////////////////////////REALTION TO EMPLOYEES START (@ManyToOne)////////////////////////////////////
 
 	@ManyToOne(optional = true, cascade= CascadeType.PERSIST)
 	@JoinColumn(name = "reportsTo", referencedColumnName = "employeeNumber")
@@ -103,8 +122,16 @@ public class Employee {
 		}
 	}
 	
+	private boolean sameAsFormerEmployee(Employee newEmployee) {
+		return employee==null ? newEmployee == null : employee.equals(newEmployee);
+	}
+	
+	/////////////////////////////REALTION TO EMPLOYEES END (@ManyToOne)////////////////////////////////////
+	
+	/////////////////////////////REALTION TO CUSTOMERS START /////////////////////////////////////////////
+	
 	@OneToMany(mappedBy = "employee", cascade= CascadeType.REMOVE)
-	public List<Customer> getCustomer() {
+	public List<Customer> getCustomers() {
 		return new ArrayList<Customer>(customers);
 	}
 	public void setCustomers(List<Customer> customers) {
@@ -126,18 +153,8 @@ public class Employee {
 		  customer.setEmployee(null);
 	}
 	
-	private boolean sameAsFormerOffice(Office newOffice) {
-		return office==null? newOffice == null : office.equals(newOffice);
-	}
-	
-	private boolean sameAsFormerEmployee(Employee newEmployee) {
-		return employee==null ? newEmployee == null : employee.equals(newEmployee);
-	}
-	
-	public void setEmployeeNumber(Integer employeeNumber) {
-		this.employeeNumber = employeeNumber;
-	}
-
+	/////////////////////////////REALTION TO CUSTOMERS END /////////////////////////////////////////////
+		
 	public String getLastName() {
 		return lastName;
 	}
@@ -177,10 +194,9 @@ public class Employee {
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
 	}
-
+	
 	public static class EmployeeBuilder {
 		
-		private Integer employeeNumber;
 		private String lastName;
 		private String firstName;
 		private String extension;
@@ -188,13 +204,11 @@ public class Employee {
 		private Office office;
 		private Employee reportsTo;
 		private String jobTitle;
+		private List<Employee> employees;
+		private List<Customer> customers;
 		
 		public EmployeeBuilder() {}
 		
-		public EmployeeBuilder setEmployeeNumber(Integer employeeNumber) {
-			this.employeeNumber = employeeNumber;
-			return this;
-		}
 		public EmployeeBuilder setLastName(String lastName) {
 			this.lastName = lastName;
 			return this;
@@ -223,10 +237,17 @@ public class Employee {
 			this.office = office;
 			return this;
 		}
+		public EmployeeBuilder setEmployees(List<Employee> employees) {
+			this.employees = employees;
+			return this;
+		}
+		public EmployeeBuilder setCustomers(List<Customer> customers) {
+			this.customers = customers;
+			return this;
+		}
 		
 		public Employee build() {
 			Employee employee = new Employee();
-			employee.employeeNumber = this.employeeNumber;
 			employee.lastName = this.lastName;
 			employee.firstName = this.firstName;
 			employee.extension = this.extension;
@@ -234,6 +255,8 @@ public class Employee {
 			employee.office = this.office;
 			employee.jobTitle = this.jobTitle;
 			employee.employee = this.reportsTo;
+			employee.employees = this.employees;
+			employee.customers = this.customers;
 			return employee;
 		}
 		

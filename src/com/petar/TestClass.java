@@ -25,7 +25,7 @@ public class TestClass {
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("MyCompany");;
 		List<Customer> customers = new ArrayList<Customer>();
 		List<Employee> employees = new ArrayList<Employee>();
-		CustomerService service = new CustomerServiceImpl(entityManagerFactory);
+		CustomerService customerService = new CustomerServiceImpl(entityManagerFactory);
 		EmployeeService empService = new EmployeeServiceImpl(entityManagerFactory);
 				
 //		Customer customer = new Customer.CustomerBuilder()
@@ -41,26 +41,28 @@ public class TestClass {
 //										.setPostalCode("15300")
 //										.setState("Srbija")
 //										.build();
-//		Office office = new Office.OfficeBuilder("1").setCity("Beograd")
-//													   .setPhone("12343")
-//													   .setAddressLine1("add line 1")
-//													   .setCountry("Srbija")
-//													   .setPostalCode("11000")
-//													   .setTerritory("teritorija")
-//													   .build();
-//		
-//		Employee bossEmployee = new Employee.EmployeeBuilder()
-//				  .setFirstName("Petar")
-//				  .setLastName("Petrovic")
-//				  .setEmail("petar@petar.com")
-//				  .setExtension("x55586")
-//				  .setOffice(office)
-//				  .setJobTitle("CapoDiTuttiCappi")
-//				  .build();
+		
+		Office office = new Office.OfficeBuilder()
+								  .setCity("Beograd")
+								  .setPhone("12343")
+								  .setAddressLine1("add line 1")
+								  .setCountry("Srbija")
+								  .setPostalCode("11000")
+								  .setTerritory("teritorija")
+								  .build();
+		
+		Employee bossEmployee = new Employee.EmployeeBuilder()
+				  .setFirstName("Petar")
+				  .setLastName("Petrovic")
+				  .setEmail("petar@petar.com")
+				  .setExtension("x55586")
+				  .setOffice(office)
+				  .setJobTitle("CapoDiTuttiCappi")
+				  .build();
 //		
 //		
 //		System.out.println(bossEmployee.getFirstName() + " is the boss!");
-//		
+		
 //		Employee subEmployee = new Employee.EmployeeBuilder()
 //				  .setReportsTo(bossEmployee)
 //				  .setFirstName("Stefan")
@@ -71,6 +73,20 @@ public class TestClass {
 //				  .setJobTitle("Capo")
 //				  .build();
 //		System.out.println(subEmployee.getFirstName() + " is a capo!");		
+		
+		
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.persist(bossEmployee);
+		entityManager.getTransaction().commit();
+		entityManager.clear();
+		entityManager.close();
+		
+//		customerService.addCustomer(customer);
+		
+//		Customer cust = customerService.getCustomer(21);
+		
+//		bossEmployee.addCustomer(cust);
 //
 //	
 //		Employee emp = empService.getEmployee(48);
@@ -110,11 +126,11 @@ public class TestClass {
 //		//empService.addEmployee(employee);
 //		
 		
-		employees = empService.getAllEmployees();
-		for (Employee employee : employees) {
-			System.out.println(employee.getFirstName());
-		}
-		System.out.println("Total of : " + employees.size() + " employees");
+//		employees = empService.getAllEmployees();
+//		for (Employee employee : employees) {
+//			System.out.println(employee.getFirstName());
+//		}
+//		System.out.println("Total of : " + employees.size() + " employees");
 	}
 
 }
