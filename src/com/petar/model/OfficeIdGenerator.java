@@ -32,7 +32,7 @@ import org.hibernate.id.IdentifierGenerator;
 	                * e.g. Oracle: "SELECT "+sequenceName+".NEXTVAL FROM DUAL"
 	                * PostgreSQL: "SELECT  NEXTVAL('+sequenceName+"')  
 	                * */
-	                //statement.executeUpdate("UPDATE " + DEFAULT_SEQUENCE_NAME + " SET next_val=LAST_INSERT_ID(next_val+1)");
+	                statement.executeUpdate("UPDATE " + DEFAULT_SEQUENCE_NAME + " SET next_val=LAST_INSERT_ID(next_val+1)");
 	                resultSet = statement.executeQuery("SELECT next_val FROM  " + DEFAULT_SEQUENCE_NAME);
 	            } catch (Exception e) {
 

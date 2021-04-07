@@ -91,7 +91,7 @@ public class Office {
 		this.territory = territory;
 	}
 
-	@OneToMany(mappedBy = "office", cascade=CascadeType.REMOVE)
+	@OneToMany(mappedBy = "office", cascade= CascadeType.PERSIST)
 	public List<Employee> getEmployees() {
 		return new ArrayList<Employee>(employees);
 	}

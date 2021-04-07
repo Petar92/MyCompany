@@ -17,7 +17,7 @@ public interface OfficeService {
 	public boolean deleteOffice(Office office);
 	
 	@WebMethod
-	public Office getOffice(int id);
+	public Office getOffice(String id);
 	
 	@WebMethod
 	public List<Office> getAllOffices();

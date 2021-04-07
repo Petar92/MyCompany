@@ -17,6 +17,8 @@ import com.petar.service.CustomerService;
 import com.petar.service.CustomerServiceImpl;
 import com.petar.service.EmployeeService;
 import com.petar.service.EmployeeServiceImpl;
+import com.petar.service.OfficeService;
+import com.petar.service.OfficeServiceImpl;
 
 public class TestClass {
 
@@ -25,8 +27,9 @@ public class TestClass {
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("MyCompany");;
 		List<Customer> customers = new ArrayList<Customer>();
 		List<Employee> employees = new ArrayList<Employee>();
-		CustomerService service = new CustomerServiceImpl(entityManagerFactory);
+		CustomerService customerService = new CustomerServiceImpl(entityManagerFactory);
 		EmployeeService empService = new EmployeeServiceImpl(entityManagerFactory);
+		OfficeService officeService = new OfficeServiceImpl(entityManagerFactory);
 				
 		Customer customer = new Customer.CustomerBuilder()
 										.setAddressLine1("addres 1")
@@ -49,7 +52,16 @@ public class TestClass {
 													   .setPostalCode("11000")
 													   .setTerritory("teritorija")
 													   .build();
-//		
+		
+		
+		Office office2 = new Office.OfficeBuilder().setCity("Loznica")
+				   .setPhone("22222")
+				   .setAddressLine1("add line 1")
+				   .setCountry("Srbija")
+				   .setPostalCode("15300")
+				   .setTerritory("Podrinje")
+				   .build();
+		
 		Employee bossEmployee = new Employee.EmployeeBuilder()
 				  .setFirstName("Petar")
 				  .setLastName("Petrovic")
@@ -63,7 +75,7 @@ public class TestClass {
 		System.out.println(bossEmployee.getFirstName() + " is the boss!");
 		
 		Employee subEmployee = new Employee.EmployeeBuilder()
-				  .setReportsTo(bossEmployee)
+//				  .setReportsTo(bossEmployee)
 				  .setFirstName("Stefan")
 				  .setLastName("Petrovic")
 				  .setEmail("stefan@petrovic.com")
@@ -73,48 +85,8 @@ public class TestClass {
 				  .build();
 		System.out.println(subEmployee.getFirstName() + " is a capo!");	
 		
-		
-		subEmployee.setOffice(office);
-//		subEmployee.addCustomer(customer);
-
-	
-//		Employee emp = empService.getEmployee(48);
-//		Employee boss = empService.getEmployee(69);
-		
-//		empService.deleteEmployee(boss);
-//		
-//		office.addEmployee(bossEmployee);
-//		bossEmployee.setOffice(office);
-//		
-//		office.addEmployee(subEmployee);
-//		subEmployee.setOffice(office);
-//		
-//		System.out.println(subEmployee.getFirstName() + "'s office number is " + subEmployee.getOffice().getOfficeCode());
-//		
-//		empService.addEmployee(bossEmployee);
+		bossEmployee.addEmployee(subEmployee);
 		empService.addEmployee(subEmployee);
-		
-//		Employee employee = empService.getEmployee(1002);
-//		
-//		System.out.println("employee name " + employee.getFirstName());
-//		System.out.println(employee.getFirstName() + "'s office is in "  + employee.getOffice().getCity());
-		
-//		service.addCustomer(customer);
-//		service.deleteCustomer(customer);
-//		service.getCustomer(489);
-//		customers = service.getAllCustomers();
-//		int count = 0;
-//		for (Customer customer2 : customers) {
-//			System.out.println("Contact First Name is " + customer2.getContactFirstName());
-//			count++;
-//		}
-//		System.out.println("Total number of customers is " + count);
-
-//		employees = empService.getAllEmployees();
-//		for (Employee employee : employees) {
-//			System.out.println(employee.getFirstName());
-//		}
-//		System.out.println("Total of : " + employees.size() + " employees");
 	}
 
 }
